@@ -1,0 +1,11 @@
+# Git ignore file for POLARIS SIH Prototype
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv
+venv/
+*.db-journal
+.DS_Store
+Thumbs.db
