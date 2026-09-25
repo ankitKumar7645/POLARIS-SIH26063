@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLARIS | NCPOR Polar Science Outreach & Knowledge Repository</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        polar: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            950: '#032030'
+                        },
+                        glacier: {
+                            base: '#061325',
+                            card: '#0a1d37',
+                            border: '#163860',
+                            accent: '#00f2fe'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        tech: ['Rajdhani', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <!-- Chart.js & Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-[#030d1a] text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-polar-500 selection:text-white">
+
+    <!-- TOP GOVT / MOES EMBLEM BAR -->
+    <header class="border-b border-glacier-border bg-[#020812]/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- MoES Header Banner -->
+            <div class="flex items-center justify-between py-2 border-b border-glacier-border/40 text-xs text-slate-400">
+                <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Govt. of India | MoES
+                    </span>
+                    <span class="hidden sm:inline">National Centre for Polar and Ocean Research (NCPOR)</span>
+                    <span class="hidden md:inline text-slate-500">|</span>
+                    <span class="hidden md:inline text-cyan-400">SIH Problem Statement: 26063</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2 text-slate-300">
+                        <i class="fa-solid fa-satellite-dish text-polar-400 animate-pulse"></i>
+                        <span id="telemetry-summary">Connecting to Polar Stations...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Primary Navigation & Branding -->
+            <div class="flex items-center justify-between py-3.5">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-cyan-500/20 border border-cyan-400/40">
+                        <i class="fa-solid fa-compass-drafting text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-xl sm:text-2xl font-tech font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-polar-400">
+                                POLARIS
+                            </h1>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 font-semibold uppercase tracking-wider">
+                                MoES Portal
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 hidden sm:block">
+                            Integrated Polar Science Outreach, Knowledge Repository & Media Dissemination
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="flex items-center gap-1 sm:gap-2">
+                    <button onclick="switchTab('explorer')" id="tab-btn-explorer" class="nav-tab active-tab px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-earth-americas text-cyan-400"></i>
+                        <span class="hidden md:inline">Polar Outposts</span>
+                    </button>
+                    <button onclick="switchTab('repository')" id="tab-btn-repository" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-book-atlas text-blue-400"></i>
+                        <span class="hidden md:inline">Knowledge Archive</span>
+                    </button>
+                    <button onclick="switchTab('ai-engine')" id="tab-btn-ai-engine" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 bg-gradient-to-r from-purple-900/30 to-indigo-900/30 border border-purple-500/40 text-purple-200 hover:text-white">
+                        <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i>
+                        <span>AI Media Disseminator</span>
+                        <span class="px-1.5 py-0.2 text-[10px] bg-purple-500/30 text-purple-300 rounded font-mono">SIH Core</span>
+                    </button>
+                    <button onclick="switchTab('education')" id="tab-btn-education" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-emerald-400"></i>
+                        <span class="hidden md:inline">Smart Education</span>
+                    </button>
+                    <button onclick="switchTab('admin')" id="tab-btn-admin" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-amber-400"></i>
+                        <span class="hidden md:inline">Scientist Console</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- LIVE TELEMETRY TICKER -->
+    <section class="bg-gradient-to-r from-glacier-card via-[#06182e] to-glacier-card border-b border-glacier-border py-2 px-4 text-xs font-tech">
+        <div class="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto whitespace-nowrap gap-6 scrollbar-none" id="telemetry-bar">
+            <!-- Dynamic station tickers injected by JS -->
+        </div>
+    </section>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- =================== TAB 1: POLAR OUTPOSTS & GIS MAP =================== -->
+        <section id="tab-explorer" class="space-y-6">
+            <!-- Hero Introduction -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0c2444] via-[#091a32] to-[#040f1d] border border-polar-500/30 p-6 md:p-8 shadow-2xl">
+                <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-semibold uppercase tracking-wider mb-3">
+                        <i class="fa-solid fa-snowflake"></i> India's Multi-Polar Scientific Footprint
+                    </div>
+                    <h2 class="text-2xl md:text-4xl font-tech font-bold text-white tracking-wide">
+                        Antarctica • Arctic • The Third Pole Himalayas
+                    </h2>
+                    <p class="mt-2 text-slate-300 text-sm md:text-base leading-relaxed">
+                        Explore India's year-round scientific research bases operated by the National Centre for Polar and Ocean Research (NCPOR), Ministry of Earth Sciences. From deep ice-core paleoclimatology in Antarctica to monsoon teleconnection tracking in the High Arctic.
+                    </p>
+                    <div class="mt-5 flex flex-wrap items-center gap-4 text-xs">
+                        <div class="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-lg border border-slate-700/60">
+                            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                            <span>Bharati (East Antarctica, 69°S)</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-lg border border-slate-700/60">
+                            <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+                            <span>Maitri (Queen Maud Land, 70°S)</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-lg border border-slate-700/60">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                            <span>Himadri (Svalbard Arctic, 79°N)</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-lg border border-slate-700/60">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                            <span>Himansh (Spiti Himalayas, 4,080m)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GIS Interactive Map + Telemetry Panel -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Leaflet Interactive Polar Map -->
+                <div class="lg:col-span-2 bg-glacier-card rounded-2xl border border-glacier-border overflow-hidden shadow-xl flex flex-col">
+                    <div class="px-5 py-3 border-b border-glacier-border flex items-center justify-between bg-[#07172c]">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot text-cyan-400"></i>
+                            <h3 class="font-tech font-bold tracking-wide text-white text-base">Global Polar Observatories GIS Map</h3>
+                        </div>
+                        <span class="text-xs text-slate-400">Click station markers to view field data</span>
+                    </div>
+                    <div id="polar-map" class="w-full h-[440px] z-10"></div>
+                </div>
+
+                <!-- Active Station Detailed Dossier -->
+                <div class="bg-glacier-card rounded-2xl border border-glacier-border p-5 flex flex-col shadow-xl" id="station-details-card">
+                    <div class="flex items-center justify-between pb-3 border-b border-glacier-border">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-cyan-400" id="station-detail-tag">Antarctic Base</span>
+                        <span class="px-2 py-0.5 rounded text-xs font-medium bg-emerald-950/80 border border-emerald-500/40 text-emerald-300" id="station-detail-status">Active</span>
+                    </div>
+                    <div class="mt-4 flex-1 space-y-4">
+                        <div class="flex items-start gap-4">
+                            <img id="station-detail-img" src="" alt="Station" class="w-20 h-20 rounded-xl object-cover border border-cyan-500/30">
+                            <div>
+                                <h4 class="text-lg font-tech font-bold text-white" id="station-detail-name">Loading...</h4>
+                                <p class="text-xs text-slate-400" id="station-detail-loc">Location</p>
+                                <p class="text-xs text-cyan-300 font-mono mt-1" id="station-detail-coords">00.00°S, 00.00°E</p>
+                            </div>
+                        </div>
+
+                        <!-- Live Metrics Grid -->
+                        <div class="grid grid-cols-2 gap-2 text-xs font-tech">
+                            <div class="bg-black/30 p-2.5 rounded-lg border border-slate-700/50">
+                                <span class="text-slate-400 block">Current Surface Temp</span>
+                                <span class="text-lg font-bold text-cyan-300" id="station-detail-temp">-00.0°C</span>
+                            </div>
+                            <div class="bg-black/30 p-2.5 rounded-lg border border-slate-700/50">
+                                <span class="text-slate-400 block">Wind Velocity</span>
+                                <span class="text-lg font-bold text-indigo-300" id="station-detail-wind">00 knots</span>
+                            </div>
+                            <div class="bg-black/30 p-2.5 rounded-lg border border-slate-700/50">
+                                <span class="text-slate-400 block">Active Contingent</span>
+                                <span class="text-lg font-bold text-amber-300" id="station-detail-personnel">00 Scientists</span>
+                            </div>
+                            <div class="bg-black/30 p-2.5 rounded-lg border border-slate-700/50">
+                                <span class="text-slate-400 block">Elevation</span>
+                                <span class="text-lg font-bold text-emerald-300" id="station-detail-elevation">0 m ASL</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span class="text-xs font-semibold text-slate-300 block mb-1">Key Research Disciplines:</span>
+                            <p class="text-xs text-slate-400 leading-relaxed bg-[#051120] p-2.5 rounded-lg border border-slate-800" id="station-detail-disciplines">
+                                Glaciology, Atmospheric Physics
+                            </p>
+                        </div>
+
+                        <p class="text-xs text-slate-300 leading-relaxed" id="station-detail-summary">
+                            Station description will appear here.
+                        </p>
+                    </div>
+
+                    <button onclick="filterRepositoryByStation(currentSelectedStationId)" class="mt-4 w-full py-2 px-3 rounded-lg bg-polar-600 hover:bg-polar-500 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass"></i> View Archived Research from this Station
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Expeditions Timeline & Field Dispatches -->
+            <div class="bg-glacier-card rounded-2xl border border-glacier-border p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-tech font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-ship text-blue-400"></i> Active Indian Scientific Expeditions
+                        </h3>
+                        <p class="text-xs text-slate-400">Current scientific voyages in Antarctica, Arctic, and Southern Ocean</p>
+                    </div>
+                    <span class="text-xs px-2.5 py-1 rounded-full bg-blue-950 border border-blue-500/40 text-blue-300 font-mono">
+                        MoES Mission Control
+                    </span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="expeditions-container">
+                    <!-- Injected dynamically via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- =================== TAB 2: KNOWLEDGE ARCHIVE & DATA REPOSITORY =================== -->
+        <section id="tab-repository" class="space-y-6 hidden">
+            <!-- Search & Filter Controls -->
+            <div class="bg-glacier-card rounded-2xl border border-glacier-border p-5 shadow-xl space-y-4">
+                <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-tech font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-database text-cyan-400"></i> MoES Integrated Polar Knowledge Repository
+                        </h2>
+                        <p class="text-xs text-slate-400">Search scientific datasets, expedition reports, and peer-reviewed publications</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openUploadModal()" class="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-semibold flex items-center gap-2 shadow-md">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Deposit Research Artifact
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter Row -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+                    <!-- Search Input -->
+                    <div class="relative">
+                        <i class="fa-solid fa-search absolute left-3 top-3 text-slate-500 text-xs"></i>
+                        <input type="text" id="repo-search-input" placeholder="Search keywords, author, DOI..." 
+                               onkeyup="debounceSearch()"
+                               class="w-full bg-[#051120] border border-slate-700 rounded-lg pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400">
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div>
+                        <select id="repo-category-filter" onchange="loadRepository()"
+                                class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                            <option value="all">All Artifact Categories</option>
+                            <option value="dataset">Scientific Datasets</option>
+                            <option value="report">Expedition Reports</option>
+                            <option value="publication">Peer-Reviewed Publications</option>
+                        </select>
+                    </div>
+
+                    <!-- Station Filter -->
+                    <div>
+                        <select id="repo-station-filter" onchange="loadRepository()"
+                                class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                            <option value="all">All Observatories</option>
+                            <option value="bharati">Bharati (Antarctica)</option>
+                            <option value="maitri">Maitri (Antarctica)</option>
+                            <option value="himadri">Himadri (Arctic)</option>
+                            <option value="himansh">Himansh (Himalayas)</option>
+                        </select>
+                    </div>
+
+                    <!-- Quick Stats Pill -->
+                    <div class="flex items-center justify-between bg-[#040d1a] border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-400 font-tech">
+                        <span>Total Items: <b class="text-cyan-400" id="repo-item-count">0</b></span>
+                        <span>Total Downloads: <b class="text-emerald-400" id="repo-download-count">0</b></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Repository Items Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="repository-container">
+                <!-- Dynamic cards populated by JS -->
+            </div>
+
+            <!-- Multimedia Archive Gallery -->
+            <div class="bg-glacier-card rounded-2xl border border-glacier-border p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-tech font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-photo-film text-purple-400"></i> Field Photography & Video Archive
+                        </h3>
+                        <p class="text-xs text-slate-400">Verified high-resolution media captured during Indian scientific polar operations</p>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs">
+                        <button onclick="filterMedia('all')" class="px-2.5 py-1 rounded bg-black/40 text-slate-300 hover:text-white border border-slate-700">All</button>
+                        <button onclick="filterMedia('photo')" class="px-2.5 py-1 rounded bg-black/40 text-slate-300 hover:text-white border border-slate-700">Photos</button>
+                        <button onclick="filterMedia('bharati')" class="px-2.5 py-1 rounded bg-black/40 text-slate-300 hover:text-white border border-slate-700">Antarctica</button>
+                        <button onclick="filterMedia('himadri')" class="px-2.5 py-1 rounded bg-black/40 text-slate-300 hover:text-white border border-slate-700">Arctic</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="media-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- =================== TAB 3: AI MEDIA & SOCIAL DISSEMINATION ENGINE =================== -->
+        <section id="tab-ai-engine" class="space-y-6 hidden">
+            <!-- Header Banner -->
+            <div class="bg-gradient-to-r from-purple-950/60 via-[#101035] to-indigo-950/60 rounded-2xl border border-purple-500/40 p-6 md:p-8 shadow-2xl relative overflow-hidden">
+                <div class="relative z-10 max-w-3xl">
+                    <span class="px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400/40 text-purple-300 text-xs font-semibold uppercase tracking-wider">
+                        <i class="fa-solid fa-robot mr-1"></i> Core SIH26063 Innovation Feature
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-tech font-bold text-white mt-3">
+                        AI Polar Content & Media Dissemination Engine
+                    </h2>
+                    <p class="text-sm text-slate-300 mt-2 leading-relaxed">
+                        Solve the scientific outreach bottleneck! Ingest expedition reports, scientific papers, or field findings, and instantly generate high-impact, platform-tailored communication packets: <b>Twitter/X Threads, LinkedIn Posts, Instagram Captions, Official MoES Press Releases, and Smart Education Bites for Students.</b>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Two-Column Generator Workspace -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left: Content Input & Control Panel -->
+                <div class="lg:col-span-5 bg-glacier-card rounded-2xl border border-glacier-border p-5 shadow-xl space-y-4">
+                    <h3 class="text-base font-tech font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-pen-nib text-cyan-400"></i> Input Polar Research Dispatch
+                    </h3>
+
+                    <!-- Quick Preset Picker -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Load Sample Polar Findings:</label>
+                        <select id="ai-preset-picker" onchange="loadPresetText()" class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400">
+                            <option value="">-- Choose a realistic NCPOR discovery --</option>
+                            <option value="arctic_monsoon">Arctic Sea Ice Depletion & Indian Monsoon Teleconnection</option>
+                            <option value="ice_core_co2">150-Year Ice Core CO2 Chronology from Maitri Base</option>
+                            <option value="himalayan_glacier">Western Himalayan Cryosphere Mass Loss at Himansh</option>
+                            <option value="antarctic_microbes">Cold-Active Psychrophilic Enzymes in Schirmacher Oasis</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Research Title / Headline:</label>
+                        <input type="text" id="ai-input-title" placeholder="e.g., Century-Scale Ice Core Geochemistry at Maitri"
+                               class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-400">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Scientific Abstract / Field Report Dispatch:</label>
+                        <textarea id="ai-input-text" rows="6" placeholder="Paste scientific abstract, cruise summary, or research findings here..."
+                                  class="w-full bg-[#051120] border border-slate-700 rounded-lg p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-400"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Target Observatory:</label>
+                            <select id="ai-input-station" class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                                <option value="bharati">Bharati (Antarctica)</option>
+                                <option value="maitri">Maitri (Antarctica)</option>
+                                <option value="himadri">Himadri (Arctic)</option>
+                                <option value="himansh">Himansh (Himalayas)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Target Audience:</label>
+                            <select id="ai-input-audience" class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                                <option value="all">Multidisciplinary & Public</option>
+                                <option value="students">K-12 & University Students</option>
+                                <option value="media">Journalists & Press</option>
+                                <option value="scientists">Global Research Community</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button onclick="triggerAIGeneration()" id="ai-generate-btn" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white text-sm font-tech font-bold tracking-wide shadow-lg shadow-purple-600/30 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-sparkles"></i> Synthesize Multi-Platform Outreach Content
+                    </button>
+                </div>
+
+                <!-- Right: Generated Outputs & Mock Social Previews -->
+                <div class="lg:col-span-7 bg-glacier-card rounded-2xl border border-glacier-border p-5 shadow-xl flex flex-col">
+                    <!-- Platform Selector Tabs -->
+                    <div class="flex items-center justify-between border-b border-glacier-border pb-3">
+                        <div class="flex items-center gap-1 overflow-x-auto scrollbar-none" id="ai-platform-tabs">
+                            <button onclick="switchAIPlatform('twitter')" id="ai-tab-twitter" class="ai-platform-tab active-platform px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5">
+                                <i class="fa-brands fa-x-twitter text-slate-300"></i> Twitter / X
+                            </button>
+                            <button onclick="switchAIPlatform('linkedin')" id="ai-tab-linkedin" class="ai-platform-tab px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5">
+                                <i class="fa-brands fa-linkedin text-blue-400"></i> LinkedIn
+                            </button>
+                            <button onclick="switchAIPlatform('instagram')" id="ai-tab-instagram" class="ai-platform-tab px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5">
+                                <i class="fa-brands fa-instagram text-pink-400"></i> Instagram
+                            </button>
+                            <button onclick="switchAIPlatform('press_release')" id="ai-tab-press_release" class="ai-platform-tab px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5">
+                                <i class="fa-solid fa-newspaper text-amber-400"></i> PIB / Press
+                            </button>
+                            <button onclick="switchAIPlatform('smart_education')" id="ai-tab-smart_education" class="ai-platform-tab px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5">
+                                <i class="fa-solid fa-graduation-cap text-emerald-400"></i> Education Bite
+                            </button>
+                        </div>
+                        <button onclick="copyCurrentAICopy()" class="text-xs px-2.5 py-1 rounded bg-black/40 hover:bg-black/60 border border-slate-700 text-cyan-400 flex items-center gap-1">
+                            <i class="fa-solid fa-copy"></i> <span id="copy-btn-text">Copy</span>
+                        </button>
+                    </div>
+
+                    <!-- Platform Preview Canvas -->
+                    <div class="flex-1 mt-4 flex flex-col justify-between">
+                        <div id="ai-output-container" class="bg-[#051120] border border-slate-800 rounded-xl p-4 text-xs font-mono whitespace-pre-line text-slate-200 min-h-[300px] overflow-y-auto leading-relaxed">
+                            Click "Synthesize Multi-Platform Outreach Content" or select a preset to generate platform-specific drafts.
+                        </div>
+
+                        <!-- Action Bar for Dissemination Queue -->
+                        <div class="mt-4 pt-3 border-t border-glacier-border flex items-center justify-between">
+                            <div class="text-xs text-slate-400 flex items-center gap-2">
+                                <i class="fa-solid fa-tags text-purple-400"></i>
+                                <span id="ai-hashtags-preview">#PolarScience #NCPOR #MoES</span>
+                            </div>
+                            <button onclick="publishToQueue()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-2 shadow-md">
+                                <i class="fa-solid fa-paper-plane"></i> Approve & Queue for MoES Broadcast
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dissemination Queue & Content History -->
+            <div class="bg-glacier-card rounded-2xl border border-glacier-border p-6 shadow-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-tech font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bullhorn text-cyan-400"></i> Media Dissemination Feed & Outreach Queue
+                        </h3>
+                        <p class="text-xs text-slate-400">Real-time status of scheduled polar tweets, media releases, and educational dispatches</p>
+                    </div>
+                    <button onclick="loadDisseminations()" class="text-xs text-cyan-400 hover:underline">
+                        <i class="fa-solid fa-rotate"></i> Refresh Feed
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="disseminations-list">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- =================== TAB 4: SMART EDUCATION & STUDENT HUB =================== -->
+        <section id="tab-education" class="space-y-6 hidden">
+            <!-- Educational Header -->
+            <div class="bg-gradient-to-r from-emerald-950/70 via-[#072418] to-teal-950/70 rounded-2xl border border-emerald-500/40 p-6 md:p-8 shadow-2xl relative overflow-hidden">
+                <div class="max-w-3xl">
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-semibold uppercase tracking-wider">
+                        <i class="fa-solid fa-school mr-1"></i> SIH Theme: Smart Education
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-tech font-bold text-white mt-3">
+                        Polar Shiksha: Young Polar Scientists Learning Hub
+                    </h2>
+                    <p class="text-sm text-slate-300 mt-2 leading-relaxed">
+                        Bringing Antarctica, the Arctic, and the Himalayas straight into classrooms! Learn how polar ice keeps the Earth cool, discover extremophile biology, explore 3D polar stations, and take the National Polar Science Quiz to earn your official digital certificate.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Quiz & Interactive Modules Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left: Interactive Polar Quiz Card -->
+                <div class="lg:col-span-7 bg-glacier-card rounded-2xl border border-glacier-border p-6 shadow-xl flex flex-col">
+                    <div class="flex items-center justify-between pb-3 border-b border-glacier-border">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-tech font-bold text-white text-base">National Polar Science Knowledge Quiz</h3>
+                                <p class="text-[11px] text-slate-400">Complete 5 questions to receive a verified MoES-NCPOR Junior Explorer Certificate</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-mono px-2.5 py-1 rounded bg-black/40 border border-slate-700 text-emerald-300" id="quiz-progress-text">
+                            Question 1 of 5
+                        </span>
+                    </div>
+
+                    <!-- Quiz Content Area -->
+                    <div class="flex-1 mt-6" id="quiz-body">
+                        <div id="quiz-question-box">
+                            <h4 class="text-sm sm:text-base font-medium text-slate-100 mb-4" id="quiz-question-title">
+                                Loading questions from database...
+                            </h4>
+                            <div class="space-y-2.5" id="quiz-options-container">
+                                <!-- Options dynamically rendered -->
+                            </div>
+                        </div>
+
+                        <!-- Feedback / Explanation Box -->
+                        <div id="quiz-feedback-box" class="hidden mt-4 p-3 rounded-lg text-xs leading-relaxed"></div>
+                    </div>
+
+                    <!-- Quiz Actions -->
+                    <div class="mt-6 pt-4 border-t border-glacier-border flex items-center justify-between">
+                        <button onclick="resetQuiz()" class="text-xs text-slate-400 hover:text-white">
+                            <i class="fa-solid fa-rotate-left"></i> Reset Quiz
+                        </button>
+                        <button onclick="nextQuizQuestion()" id="quiz-next-btn" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-2">
+                            <span>Next Question</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Educational Infographics & Interactive Albedo Simulator -->
+                <div class="lg:col-span-5 space-y-4">
+                    <!-- Interactive Albedo & Sea Ice Concept -->
+                    <div class="bg-glacier-card rounded-2xl border border-glacier-border p-5 shadow-xl">
+                        <h4 class="font-tech font-bold text-white text-sm flex items-center gap-2 mb-2">
+                            <i class="fa-solid fa-sun text-amber-400"></i> Interactive Concept: The Albedo Effect
+                        </h4>
+                        <p class="text-xs text-slate-300 mb-3">
+                            Slide the sea-ice coverage slider to see how polar ice reflects solar radiation back into space!
+                        </p>
+                        <div class="bg-[#051120] p-3 rounded-xl border border-slate-800 space-y-3">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-slate-400">Sea Ice & Snow Cover:</span>
+                                <span class="font-mono text-cyan-400 font-bold" id="albedo-ice-percent">85%</span>
+                            </div>
+                            <input type="range" id="albedo-slider" min="10" max="95" value="85" oninput="updateAlbedoSim(this.value)" class="w-full accent-cyan-400 cursor-pointer">
+                            <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                                <div class="bg-black/30 p-2 rounded border border-slate-700/50">
+                                    <span class="text-slate-400 block text-[10px]">Solar Energy Reflected</span>
+                                    <b class="text-cyan-300 font-mono text-sm" id="albedo-reflected">85%</b>
+                                </div>
+                                <div class="bg-black/30 p-2 rounded border border-slate-700/50">
+                                    <span class="text-slate-400 block text-[10px]">Ocean Heat Absorbed</span>
+                                    <b class="text-rose-400 font-mono text-sm" id="albedo-absorbed">15%</b>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-slate-400 italic" id="albedo-explanation">
+                                High ice cover creates a planetary mirror, protecting the Earth from overheating.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Polar Wonder Cards -->
+                    <div class="bg-glacier-card rounded-2xl border border-glacier-border p-5 shadow-xl space-y-3">
+                        <h4 class="font-tech font-bold text-white text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-lightbulb text-amber-300"></i> Polar Science Fast Facts
+                        </h4>
+                        <div class="space-y-2 text-xs text-slate-300">
+                            <div class="p-2.5 rounded-lg bg-[#051120] border border-slate-800 flex items-start gap-2.5">
+                                <i class="fa-solid fa-droplet text-blue-400 mt-0.5"></i>
+                                <div>
+                                    <b class="text-white">Lake Priyadarshini:</b> A pristine freshwater lake in Antarctica, maintained near Maitri station, which stays liquid under thick ice sheets.
+                                </div>
+                            </div>
+                            <div class="p-2.5 rounded-lg bg-[#051120] border border-slate-800 flex items-start gap-2.5">
+                                <i class="fa-solid fa-mountain text-amber-400 mt-0.5"></i>
+                                <div>
+                                    <b class="text-white">The Third Pole:</b> The Himalayas contain the largest volume of ice outside the Polar regions, feeding water to over 1.4 billion people!
+                                </div>
+                            </div>
+                            <div class="p-2.5 rounded-lg bg-[#051120] border border-slate-800 flex items-start gap-2.5">
+                                <i class="fa-solid fa-shield-virus text-emerald-400 mt-0.5"></i>
+                                <div>
+                                    <b class="text-white">Psychrophiles:</b> Microscopic organisms in Antarctica produce natural "antifreeze" proteins to thrive at temperatures below -20°C.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ask a Polar Scientist Callout Card in Education Tab -->
+                    <div class="bg-gradient-to-r from-cyan-950/70 to-blue-950/70 rounded-2xl border border-cyan-500/40 p-4 shadow-xl flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-xl bg-cyan-500/20 border border-cyan-400/60 flex items-center justify-center text-cyan-300 text-lg shadow-md shadow-cyan-500/20">
+                                <i class="fa-solid fa-user-astronaut"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs sm:text-sm font-tech font-bold text-white">Ask Dr. Himavani (Polar Scientist)</h4>
+                                <p class="text-[11px] text-slate-300">Live AI Q&A transmitting from Bharati Station, Antarctica</p>
+                            </div>
+                        </div>
+                        <button onclick="openChatDrawer()" class="px-3 py-1.5 rounded-lg bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md shadow-cyan-400/20">
+                            <i class="fa-solid fa-comments"></i> Start Q&A
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================== TAB 5: RESEARCHER & ADMIN CONSOLE =================== -->
+        <section id="tab-admin" class="space-y-6 hidden">
+            <!-- Console Header -->
+            <div class="bg-gradient-to-r from-slate-900 via-glacier-card to-slate-900 rounded-2xl border border-glacier-border p-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <span class="px-2.5 py-1 rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-semibold uppercase tracking-wider">
+                        <i class="fa-solid fa-lock mr-1"></i> Researcher & Mission Management
+                    </span>
+                    <h2 class="text-2xl font-tech font-bold text-white mt-2">
+                        MoES Polar Science Admin & Telemetry Center
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">
+                        Monitor repository health, metadata compliance, and automated dissemination pipelines
+                    </p>
+                </div>
+                <button onclick="openUploadModal()" class="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold flex items-center gap-2 shadow-lg shadow-cyan-600/30">
+                    <i class="fa-solid fa-upload"></i> Upload Expedition Artifact
+                </button>
+            </div>
+
+            <!-- System Metrics Dashboard -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="admin-metrics-grid">
+                <!-- Dynamically populated -->
+            </div>
+
+            <!-- Two-Column Admin Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Dissemination Channel Health -->
+                <div class="bg-glacier-card rounded-2xl border border-glacier-border p-5 shadow-xl">
+                    <h3 class="text-base font-tech font-bold text-white mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-tower-broadcast text-cyan-400"></i> Outreach Channels Connectivity
+                    </h3>
+                    <div class="space-y-3 text-xs">
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-[#051120] border border-slate-800">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-brands fa-x-twitter text-lg text-slate-200"></i>
+                                <div>
+                                    <b class="text-white block">Twitter / X MoES & NCPOR Feeds</b>
+                                    <span class="text-slate-400 text-[11px]">Auto-formatting threads with hashtags</span>
+                                </div>
+                            </div>
+                            <span class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-400 font-mono text-[11px]">Ready</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-[#051120] border border-slate-800">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-brands fa-linkedin text-lg text-blue-400"></i>
+                                <div>
+                                    <b class="text-white block">LinkedIn Research Network</b>
+                                    <span class="text-slate-400 text-[11px]">Connecting scientific publications with global institutes</span>
+                                </div>
+                            </div>
+                            <span class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-400 font-mono text-[11px]">Ready</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-[#051120] border border-slate-800">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-newspaper text-lg text-amber-400"></i>
+                                <div>
+                                    <b class="text-white block">Press Information Bureau (PIB) Wire</b>
+                                    <span class="text-slate-400 text-[11px]">Automated government press-release dispatches</span>
+                                </div>
+                            </div>
+                            <span class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-400 font-mono text-[11px]">Ready</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teleconnections Monitoring Alert -->
+                <div class="bg-glacier-card rounded-2xl border border-glacier-border p-5 shadow-xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base font-tech font-bold text-white mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Active Teleconnection Alert
+                        </h3>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                            Automated atmospheric correlation models have detected a coupling between anomalous high pressure in the Barents-Kara Arctic region and delayed withdrawal of monsoon depressions over Central India.
+                        </p>
+                        <div class="bg-[#051120] p-3 rounded-lg border border-slate-800 text-xs font-mono space-y-1">
+                            <div class="text-cyan-300">Station Himadri: Svalbard Air Temp: -6.8°C (+2.4°C anomaly)</div>
+                            <div class="text-emerald-300">Station Himansh: Samudra Tapu Glacier Ablation: Active</div>
+                            <div class="text-slate-400 text-[11px]">Correlated via MoES High Performance Computing Cluster</div>
+                        </div>
+                    </div>
+                    <button onclick="triggerTeleconnectionTweet()" class="mt-4 w-full py-2 rounded-lg bg-purple-700 hover:bg-purple-600 text-white text-xs font-semibold flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Generate Teleconnection Advisory Post
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-glacier-border bg-[#020812] py-6 text-xs text-slate-400 mt-10">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="font-tech font-bold text-slate-200 text-sm">POLARIS</span>
+                <span>• National Centre for Polar and Ocean Research (NCPOR), Ministry of Earth Sciences</span>
+            </div>
+            <div class="flex items-center gap-4 text-slate-500">
+                <span>Smart India Hackathon 2026</span>
+                <span>•</span>
+                <span>Problem Statement ID: 26063</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =================== MODAL 1: DATASET CHART VISUALIZER =================== -->
+    <div id="chart-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-glacier-card rounded-2xl border border-cyan-500/40 max-w-3xl w-full p-6 shadow-2xl relative">
+            <button onclick="closeChartModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="mb-4">
+                <span class="text-xs text-cyan-400 font-mono uppercase tracking-wider" id="chart-modal-category">Scientific Dataset</span>
+                <h3 class="text-lg font-tech font-bold text-white mt-1" id="chart-modal-title">Dataset Title</h3>
+                <p class="text-xs text-slate-400 mt-0.5" id="chart-modal-doi">DOI: Loading...</p>
+            </div>
+
+            <!-- In-browser Chart Canvas -->
+            <div class="bg-[#051120] p-4 rounded-xl border border-slate-800 h-72 w-full">
+                <canvas id="dataset-chart-canvas"></canvas>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between">
+                <span class="text-xs text-slate-400" id="chart-modal-source">Verified by NCPOR Cryosphere Division</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="triggerAIFromDatasetModal()" class="px-3 py-1.5 rounded-lg bg-purple-700 hover:bg-purple-600 text-white text-xs font-semibold flex items-center gap-1.5">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Generate AI Outreach
+                    </button>
+                    <button onclick="downloadCurrentDataset()" class="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold flex items-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> Download Raw CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =================== MODAL 2: UPLOAD ARTIFACT MODAL =================== -->
+    <div id="upload-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-glacier-card rounded-2xl border border-cyan-500/40 max-w-xl w-full p-6 shadow-2xl relative">
+            <button onclick="closeUploadModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-lg font-tech font-bold text-white flex items-center gap-2 mb-1">
+                <i class="fa-solid fa-cloud-arrow-up text-cyan-400"></i> Deposit Expedition Report or Dataset
+            </h3>
+            <p class="text-xs text-slate-400 mb-4">
+                Artifacts are automatically assigned DOIs, indexed into the repository, and queued for AI social media dissemination.
+            </p>
+
+            <form id="upload-form" onsubmit="handleArtifactUpload(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-300 mb-1">Artifact Title *</label>
+                    <input type="text" id="upload-title" required placeholder="e.g., Seasonal Albedo Dynamics at Samudra Tapu Glacier" class="w-full bg-[#051120] border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-300 mb-1">Category *</label>
+                        <select id="upload-category" class="w-full bg-[#051120] border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none">
+                            <option value="dataset">Scientific Dataset (CSV / NetCDF)</option>
+                            <option value="report">Expedition Field Report (PDF)</option>
+                            <option value="publication">Research Paper Preprint</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 mb-1">Polar Station *</label>
+                        <select id="upload-station" class="w-full bg-[#051120] border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none">
+                            <option value="bharati">Bharati (Antarctica)</option>
+                            <option value="maitri">Maitri (Antarctica)</option>
+                            <option value="himadri">Himadri (Arctic)</option>
+                            <option value="himansh">Himansh (Himalayas)</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-300 mb-1">Research Discipline</label>
+                    <input type="text" id="upload-discipline" placeholder="e.g., Paleoclimatology, Ice Dynamics, Marine Ecology" class="w-full bg-[#051120] border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-300 mb-1">Author(s) / Division</label>
+                    <input type="text" id="upload-author" placeholder="e.g., Dr. A. Sharma (Cryosphere Division, NCPOR)" class="w-full bg-[#051120] border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-300 mb-1">Executive Summary / Abstract *</label>
+                    <textarea id="upload-summary" rows="3" required placeholder="Provide concise findings. This summary will also feed the AI Disseminator to generate tweets and press releases." class="w-full bg-[#051120] border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none"></textarea>
+                </div>
+
+                <div class="pt-2 flex items-center justify-end gap-2">
+                    <button type="button" onclick="closeUploadModal()" class="px-3 py-2 rounded-lg bg-slate-800 text-slate-300">Cancel</button>
+                    <button type="submit" id="upload-submit-btn" class="px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold flex items-center gap-1.5">
+                        <i class="fa-solid fa-check"></i> Deposit & Generate Outreach
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- =================== MODAL 3: YOUNG POLAR EXPLORER CERTIFICATE =================== -->
+    <div id="certificate-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-gradient-to-br from-[#0c233f] via-[#07172b] to-[#040f1d] rounded-2xl border-2 border-cyan-400/60 max-w-2xl w-full p-8 shadow-2xl relative text-center">
+            <button onclick="closeCertificateModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="w-16 h-16 mx-auto rounded-full bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center text-cyan-300 text-2xl mb-3 shadow-lg shadow-cyan-500/30">
+                <i class="fa-solid fa-award"></i>
+            </div>
+            <span class="text-xs uppercase font-mono tracking-widest text-cyan-300">National Centre for Polar and Ocean Research</span>
+            <h2 class="text-2xl font-tech font-bold text-white mt-1">CERTIFICATE OF POLAR EXCELLENCE</h2>
+            <p class="text-xs text-slate-300 mt-1">Presented under the MoES Polar Shiksha Smart Education Initiative</p>
+
+            <div class="my-6 py-4 border-y border-cyan-500/30">
+                <p class="text-xs text-slate-400">This officially certifies that</p>
+                <h3 class="text-xl sm:text-2xl font-bold text-white my-1" id="cert-student-name">Polar Explorer</h3>
+                <p class="text-xs text-slate-300 max-w-md mx-auto">
+                    has successfully mastered the fundamentals of Indian Polar Science, Antarctic Ice Cores, and Cryospheric Climate Dynamics with an outstanding score of <b class="text-cyan-300" id="cert-score-text">100%</b>.
+                </p>
+                <div class="mt-3 inline-block px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-semibold" id="cert-badge-text">
+                    Polar Science Ambassador
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between text-[11px] text-slate-400">
+                <div>
+                    <span>Certificate ID:</span>
+                    <b class="text-white font-mono block" id="cert-id-text">NCPOR-EDU-XXXXXX</b>
+                </div>
+                <div>
+                    <span>Issue Date:</span>
+                    <b class="text-white block" id="cert-date-text">September 25, 2026</b>
+                </div>
+                <div>
+                    <span class="text-cyan-400 font-tech font-bold text-xs block">Govt. of India</span>
+                    <span>Ministry of Earth Sciences</span>
+                </div>
+            </div>
+
+            <div class="mt-6 flex items-center justify-center gap-3">
+                <button onclick="window.print()" class="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md">
+                    <i class="fa-solid fa-print"></i> Print / Save Certificate PDF
+                </button>
+                <button onclick="closeCertificateModal()" class="px-4 py-2 rounded-lg bg-slate-800 text-slate-300 text-xs">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =================== FLOATING ASK A POLAR SCIENTIST CHAT WIDGET =================== -->
+    <!-- Launcher Button -->
+    <div id="chat-launcher-btn" onclick="toggleChatDrawer()" class="fixed bottom-5 right-5 z-40 flex items-center gap-3 bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-700 hover:from-cyan-500 hover:to-blue-500 text-white px-4 py-3 rounded-full shadow-2xl shadow-cyan-500/30 border border-cyan-400/50 cursor-pointer transition-all hover:scale-105 group">
+        <div class="relative w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-base">
+            <i class="fa-solid fa-user-astronaut"></i>
+            <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-[#020812] animate-pulse"></span>
+        </div>
+        <div class="hidden sm:block text-left">
+            <span class="block text-xs font-tech font-bold tracking-wider leading-tight">ASK DR. HIMAVANI</span>
+            <span class="block text-[10px] text-cyan-200">Live from Antarctica • NCPOR AI</span>
+        </div>
+        <i class="fa-solid fa-chevron-up text-xs text-cyan-200 group-hover:-translate-y-0.5 transition-transform"></i>
+    </div>
+
+    <!-- Interactive Chat Drawer -->
+    <div id="chat-drawer" class="fixed bottom-20 right-5 z-50 w-96 max-w-[calc(100vw-2.5rem)] h-[540px] max-h-[82vh] rounded-2xl bg-glacier-card border border-cyan-500/50 shadow-2xl shadow-black/80 flex flex-col overflow-hidden hidden transition-all">
+        <!-- Chat Header -->
+        <div class="p-3.5 bg-gradient-to-r from-[#071930] via-[#0b2447] to-[#071930] border-b border-glacier-border flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="relative w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-300 text-lg">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                    <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-black"></span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <h4 class="text-xs font-tech font-bold text-white tracking-wide">Dr. Himavani (NCPOR)</h4>
+                        <span class="px-1.5 py-0.2 rounded bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[9px] font-mono">Scientist</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 flex items-center gap-1">
+                        <i class="fa-solid fa-satellite text-cyan-400"></i> Bharati Station, Antarctica (-18.4°C)
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-1">
+                <button onclick="toggleVoiceSpeech()" id="voice-toggle-btn" title="Toggle Voice Read-Aloud" class="w-7 h-7 rounded-lg bg-black/40 hover:bg-black/60 text-slate-400 hover:text-cyan-400 text-xs flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-volume-high" id="voice-icon"></i>
+                </button>
+                <button onclick="toggleChatDrawer()" title="Close Chat" class="w-7 h-7 rounded-lg bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white text-xs flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Messages Container -->
+        <div id="chat-messages-container" class="flex-1 p-3.5 overflow-y-auto space-y-3 text-xs leading-relaxed">
+            <!-- Welcome message -->
+            <div class="flex items-start gap-2">
+                <div class="w-6 h-6 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 text-[10px] shrink-0 mt-0.5">
+                    <i class="fa-solid fa-snowflake"></i>
+                </div>
+                <div class="bg-[#051120] border border-slate-800 rounded-2xl rounded-tl-none p-3 text-slate-200 max-w-[85%] shadow">
+                    Namaste! I am <b>Dr. Himavani</b>, transmitting live telemetry from India's <b>Bharati Station</b> in Antarctica. Ask me anything about our polar expeditions, survival in -50°C, ice cores, or the Arctic-Indian Monsoon connection!
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Question Chips -->
+        <div class="px-3 py-2 border-t border-glacier-border/40 bg-[#040e1c] flex items-center gap-1.5 overflow-x-auto scrollbar-none text-[11px]" id="chat-suggestions-bar">
+            <button onclick="sendQuickQuestion('How do scientists survive -50°C in Antarctica?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-cyan-300 shrink-0 transition-colors">
+                ❄️ Survive -50°C
+            </button>
+            <button onclick="sendQuickQuestion('Why does India study the Arctic at Himadri?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-cyan-300 shrink-0 transition-colors">
+                🌧️ Arctic & Monsoon
+            </button>
+            <button onclick="sendQuickQuestion('What do ice cores tell us about climate change?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-cyan-300 shrink-0 transition-colors">
+                🧊 Ice Core CO2
+            </button>
+            <button onclick="sendQuickQuestion('How can I become a polar scientist?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-cyan-300 shrink-0 transition-colors">
+                🎓 Career in Polar Science
+            </button>
+        </div>
+
+        <!-- Message Input Box -->
+        <form onsubmit="handleSendChatMessage(event)" class="p-2.5 border-t border-glacier-border bg-[#07172c] flex items-center gap-2">
+            <input type="text" id="chat-input-field" placeholder="Ask Dr. Himavani a question..." autocomplete="off"
+                   class="flex-1 bg-[#051120] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400">
+            <button type="submit" id="chat-send-btn" class="w-9 h-9 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 flex items-center justify-center transition-colors shadow">
+                <i class="fa-solid fa-paper-plane text-xs"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- Leaflet JS & Application Script -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
