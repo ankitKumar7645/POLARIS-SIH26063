@@ -1,52 +1,48 @@
 """
-AI Dissemination & Content Generation Engine for NCPOR Polar Science Portal
-Generates platform-tailored social media threads, official press releases,
-and smart educational modules from raw scientific papers and field dispatches.
-Works out-of-the-box offline with rich contextual NLP generators and supports optional LLM APIs.
+NCPOR Polar Science Outreach and Media Dissemination Engine
+Generates platform-tailored communication drafts, official press releases,
+and educational briefs from raw research papers and field dispatches.
+Formatted according to Press Information Bureau (PIB) and institutional standards.
+Zero emojis, professional government and academic tone.
 """
 import re
 import os
-import random
 import json
 
 class PolarContentEngine:
     def __init__(self):
-        # Known polar entities & terms for intelligent tagging
         self.stations = {
-            "bharati": {"name": "Bharati Station", "location": "Larsemann Hills, East Antarctica", "lat": "69°S"},
-            "maitri": {"name": "Maitri Station", "location": "Schirmacher Oasis, Queen Maud Land", "lat": "70°S"},
-            "himadri": {"name": "Himadri Station", "location": "Ny-Ålesund, Svalbard, Arctic", "lat": "79°N"},
-            "himansh": {"name": "Himansh Station", "location": "Spiti Valley, Himachal Pradesh (Third Pole)", "lat": "32°N"},
-            "dakshin": {"name": "Dakshin Gangotri", "location": "Princess Astrid Coast, Antarctica", "lat": "70°S"}
+            "bharati": {"name": "Bharati Antarctic Research Station", "location": "Larsemann Hills, East Antarctica", "lat": "69°24'S, 76°11'E"},
+            "maitri": {"name": "Maitri Antarctic Research Station", "location": "Schirmacher Oasis, Queen Maud Land", "lat": "70°45'S, 11°44'E"},
+            "himadri": {"name": "Himadri Arctic Research Station", "location": "Ny-Alesund, Spitsbergen, Svalbard", "lat": "78°55'N, 11°56'E"},
+            "himansh": {"name": "Himansh High-Altitude Glaciological Station", "location": "Chandra Basin, Spiti Valley, Himachal Pradesh", "lat": "32°24'N, 77°37'E"},
+            "dakshin": {"name": "Dakshin Gangotri Memorial Base", "location": "Princess Astrid Coast, Antarctica", "lat": "70°05'S, 12°00'E"}
         }
 
     def analyze_text(self, text):
-        """Extracts keywords, polar stations, numbers, and themes from input text."""
+        """Extracts polar entities, stations, numbers, and scientific domains."""
         lower = text.lower()
         detected_stations = []
         for key, info in self.stations.items():
             if key in lower or info["name"].lower() in lower:
                 detected_stations.append(info)
 
-        # Detect research theme
         themes = []
         if any(w in lower for w in ["ice", "core", "glacier", "ablation", "firn", "mass balance"]):
-            themes.append("Glaciology & Cryosphere")
+            themes.append("Glaciology and Cryosphere Science")
         if any(w in lower for w in ["monsoon", "climate", "atmosphere", "weather", "temperature", "greenhouse"]):
-            themes.append("Climate Dynamics & Meteorology")
+            themes.append("Climate Dynamics and Meteorology")
         if any(w in lower for w in ["microb", "penguin", "krill", "organism", "fauna", "flora", "enzyme"]):
-            themes.append("Polar Biology & Ecology")
+            themes.append("Polar Biology and Marine Ecology")
         if any(w in lower for w in ["ocean", "ctd", "salinity", "current", "southern ocean"]):
-            themes.append("Polar Oceanography")
+            themes.append("Oceanographic Observations")
         if any(w in lower for w in ["aurora", "magnetic", "solar", "ozone", "radiation"]):
-            themes.append("Space Weather & Atmospheric Physics")
+            themes.append("Upper Atmospheric and Space Physics")
 
         if not themes:
-            themes.append("Interdisciplinary Polar Science")
+            themes.append("Interdisciplinary Earth System Science")
 
-        # Find notable metrics or numbers
         numbers = re.findall(r'\b\d+(?:\.\d+)?(?:%|°C|m|km|ppm|‰|kt)?\b', text)
-
         return {
             "stations": detected_stations,
             "themes": themes,
@@ -54,116 +50,114 @@ class PolarContentEngine:
         }
 
     def generate_all(self, title, input_text, station_hint="bharati"):
-        """Generates content packets for Twitter, LinkedIn, Instagram, Press Release, and Smart Education."""
+        """Generates structured dispatches for X/Twitter, LinkedIn, PIB Press Release, and Educational Briefs."""
         analysis = self.analyze_text(title + " " + input_text)
-        station_name = analysis["stations"][0]["name"] if analysis["stations"] else self.stations.get(station_hint, {}).get("name", "NCPOR Polar Observatories")
-        station_loc = analysis["stations"][0]["location"] if analysis["stations"] else "Antarctica & Arctic"
+        station_name = analysis["stations"][0]["name"] if analysis["stations"] else self.stations.get(station_hint, {}).get("name", "NCPOR Polar Research Observatories")
+        station_loc = analysis["stations"][0]["location"] if analysis["stations"] else "Antarctica and the Arctic"
         primary_theme = analysis["themes"][0]
 
         summary_sentences = [s.strip() for s in re.split(r'[.!?]+', input_text) if len(s.strip()) > 15]
         core_point = summary_sentences[0] if summary_sentences else title
-        secondary_point = summary_sentences[1] if len(summary_sentences) > 1 else "Groundbreaking polar research driving global climate solutions."
+        secondary_point = summary_sentences[1] if len(summary_sentences) > 1 else "Empirical observations conducted under the PACER scheme."
 
-        # 1. Twitter / X Thread (3-part engaging thread)
-        tweet_1 = f"🚨 NEW POLAR DISCOVERY from {station_name} ({station_loc})!\n\n❄️ {title}\n\nKey finding: {core_point}.\n\n🧵 Here is why this matters for India & our planetary climate 👇 (1/3)\n#PolarScience #NCPOR #MoES #Antarctica"
-        tweet_2 = f"📊 Science in numbers:\n• Research Theme: {primary_theme}\n• Field Hub: {station_name}\n• Impact: {secondary_point}\n\nIndian researchers under @MoESGoI are operating in sub-zero extremes to map these vital planetary shifts! 🛰️🔬 (2/3)\n#ClimateAction #IndianMonsoon"
-        tweet_3 = f"🔗 Dive into the full peer-reviewed dispatch & raw open dataset on our new Polar Science Knowledge Portal:\n👉 portal.ncpor.res.in/archive\n\nWhat polar questions do you have for our wintering scientists? Ask below! 💬 (3/3)\n#SmartEducation #ScienceCommunication"
+        # 1. Official X / Twitter Dispatch (Structured, informative, zero emojis)
+        tweet_1 = f"RESEARCH UPDATE: Findings released from {station_name} ({station_loc}).\n\nStudy Title: {title}\n\nKey Finding: {core_point}.\n\nThread on scientific findings and data access (1/3)\n#PolarScience #NCPOR #MoES #Antarctica"
+        tweet_2 = f"Scientific Summary:\n- Discipline: {primary_theme}\n- Observation Base: {station_name}\n- Key Finding: {secondary_point}\n\nMeasurements conducted under the Ministry of Earth Sciences PACER scheme. (2/3)\n#EarthSciences #ClimateResearch"
+        tweet_3 = f"Access verified scientific datasets, synoptic observations, and full expedition documentation on the NCPOR Knowledge Repository:\nhttps://ncpor.res.in/repository\n\nDirect queries may be directed to the scientific coordination division. (3/3)\n#OpenScience #PACER"
 
         twitter_content = f"{tweet_1}\n\n---\n\n{tweet_2}\n\n---\n\n{tweet_3}"
 
-        # 2. LinkedIn Post (Professional, policy & research focused)
-        linkedin_content = f"""🇮🇳 Unlocking Earth's Climate Archives from the Ends of the Earth 🌏
+        # 2. LinkedIn Institutional Announcement
+        linkedin_content = f"""National Centre for Polar and Ocean Research (NCPOR), Ministry of Earth Sciences, Government of India.
 
-The National Centre for Polar and Ocean Research (NCPOR), Ministry of Earth Sciences (MoES), is pleased to announce a significant new scientific dispatch:
+Scientific Announcement: {title}
 
-📍 Focus Area: {station_name} | {station_loc}
-🔬 Domain: {primary_theme}
-📑 Subject: {title}
+Operational Facility: {station_name} | {station_loc}
+Research Discipline: {primary_theme}
 
-Key Highlights:
-• Core Finding: {core_point}
-• Planetary Significance: {secondary_point}
-• Open Science Commitment: Datasets and telemetry are now permanently archived on the NCPOR Knowledge Repository for researchers, policy planners, and climate modelers worldwide.
+Executive Summary:
+Researchers at the National Centre for Polar and Ocean Research (NCPOR) have concluded comprehensive field investigations and data compilation on the subject above.
 
-India’s continuous presence at Antarctica, the Arctic (Himadri), and the Himalayan Third Pole (Himansh) provides indispensable empirical data to understand teleconnections affecting the Indian Summer Monsoon and sea-level dynamics.
+Key Observations:
+1. Primary Finding: {core_point}
+2. Broader Significance: {secondary_point}
+3. Open Access: Corresponding numerical time-series and synoptic telemetry have been indexed into the National Polar Knowledge Repository under standard FAIR data principles.
 
-Congratulations to our dedicated scientists and logistics crews braving extreme environments to advance planetary science!
+India's continuous observations across Antarctica, the Arctic (Himadri Base), and the Himalayas (Himansh Base) provide empirical inputs for regional and global Earth system modeling, including studies on Indian Summer Monsoon variability and cryospheric mass stability.
 
-Explore the full publication and interactive visualizer on the MoES-NCPOR Polar Portal.
+The verified research publication and associated data records are available through the institutional knowledge portal.
 
-#MoES #NCPOR #PolarScience #ClimateChange #EarthSciences #OpenScience #ResearchExcellence #IndiaInAntarctica"""
+Keywords: Polar Science, Climate Dynamics, Glaciology, NCPOR, Ministry of Earth Sciences, Open Science."""
 
-        # 3. Instagram / Visual Storytelling Caption
-        instagram_content = f"""❄️ BEYOND THE FREEZING HORIZON 🇦🇶✨
+        # 3. Instagram / Visual Media Caption (Formal, storytelling without emojis)
+        instagram_content = f"""Dispatch from {station_name} ({station_loc}).
 
-Did you know what our scientists at {station_name} just uncovered? 
+Scientific Focus: {title}
 
-{core_point} 🧊🔬
+Field Observation Summary:
+{core_point}
 
-Deep in {station_loc}, where winds scream past gale-force and temperatures plunge below -25°C, Indian researchers are decoding the past and future of our planet.
+Operating in sub-zero polar conditions, scientific contingents from the National Centre for Polar and Ocean Research (NCPOR), Ministry of Earth Sciences, maintain year-round monitoring arrays to evaluate changes across the cryosphere and planetary atmosphere.
 
-Swipe through to see:
-1️⃣ Field expedition snapshots 📸
-2️⃣ Ice & atmospheric data curves 📈
-3️⃣ Life inside India's futuristic polar station 🏠
+Field Components Highlighted:
+- In-situ meteorological and glaciological data collection
+- Sub-surface ice and atmospheric gas measurements
+- Operational logistics supporting Indian polar scientific missions
 
-💡 Question for you: If you could spend 3 months at an Indian research base in Antarctica or the Arctic, which one would you choose? Drop your answer in the comments! 👇
+Verified expedition reports and research data are publicly accessible via the NCPOR Knowledge Repository.
 
-Follow @ncpor_india for daily dispatches from the icy frontiers!
+Credit: National Centre for Polar and Ocean Research (NCPOR), Ministry of Earth Sciences.
+Tags: #NCPOR #MoES #PolarResearch #AntarcticScience #ArcticScience #Cryosphere #IndiaInAntarctica"""
 
-.
-.
-.
-#Antarctica #Arctic #PolarScience #NCPOR #MoES #IceCores #Glaciology #Aurora #ExtremeScience #Explorer #IndiaInAntarctica #SmartEducation"""
-
-        # 4. MoES Official Press Release (PIB Style)
-        press_content = f"""PRESS INFORMATION BUREAU (PIB)
-MINISTRY OF EARTH SCIENCES, GOVERNMENT OF INDIA
+        # 4. Press Information Bureau (PIB) Official Press Release
+        press_content = f"""PRESS INFORMATION BUREAU
+GOVERNMENT OF INDIA
+MINISTRY OF EARTH SCIENCES
 ***
-NEW DISPATCH: {title.upper()}
+SCIENTIFIC DISPATCH: {title.upper()}
 
-New Delhi / Vasco da Gama (Goa): 
+New Delhi / Vasco da Gama (Goa):
 
-The National Centre for Polar and Ocean Research (NCPOR), an autonomous research institution under the Ministry of Earth Sciences (MoES), has released landmark findings from {station_name} in {station_loc}.
+The National Centre for Polar and Ocean Research (NCPOR), an autonomous scientific institution under the Ministry of Earth Sciences (MoES), has released verified findings from {station_name} located at {station_loc}.
 
-The investigation, focusing on {primary_theme}, delivers crucial empirical evidence regarding polar dynamics and climate resilience:
+The study, falling under {primary_theme}, contributes critical empirical observations toward understanding polar environmental processes:
 
-HIGHLIGHTS:
-1. Operational Base: Conducted through comprehensive field observations and sampling at {station_name}.
-2. Scientific Breakthrough: {core_point}
-3. Broad Implications: {secondary_point}
+KEY HIGHLIGHTS:
+1. Research Facility: Systematic field measurements conducted at {station_name}.
+2. Core Scientific Finding: {core_point}
+3. Earth System Implications: {secondary_point}
 
-Speaking on the release, senior scientific leadership noted that India's multi-station observatories across the Arctic, Antarctica, and the Himalayas offer a unified vantage point to observe global cryosphere changes and their direct teleconnections to extreme weather events over the Indian subcontinent.
+Senior leadership at the Ministry of Earth Sciences noted that India's multi-station observational networks across Antarctica, the Arctic, and the Himalayas offer indispensable baselines for evaluating global cryosphere change and its teleconnections to atmospheric circulation patterns over the Indian subcontinent.
 
-All verified datasets, expedition reports, and geospatial findings have been made accessible to the global scientific community and general public through the MoES Integrated Polar Science Knowledge Repository.
+All verified datasets, technical expedition reports, and geospatial records have been archived in the MoES Integrated Polar Science Knowledge Repository and made accessible to the international scientific community in accordance with national open data guidelines.
 
 ***
 Ministry of Earth Sciences, Prithvi Bhavan, Lodhi Road, New Delhi."""
 
-        # 5. Smart Education Bite (For Students & Schools)
-        education_content = f"""🧊 POLAR SCIENCE WONDER OF THE DAY (For Young Explorers!) 🐧✨
+        # 5. Smart Education Science Brief (NCERT / Vigyan Prasar style, zero emojis)
+        education_content = f"""NATIONAL POLAR SCIENCE EDUCATIONAL BRIEF
+National Centre for Polar and Ocean Research (NCPOR) | Ministry of Earth Sciences
 
-Title: {title}
-Station: {station_name} 🇮🇳
+Topic: {title}
+Observatory: {station_name}
 
-🌟 WHAT DID SCIENTISTS DISCOVER?
+1. What Was Observed?
 {core_point}
 
-🔍 WHY DOES THIS MATTER TO YOU?
-Even though Antarctica and the Arctic feel thousands of kilometers away, polar ice acts as Earth's natural refrigerator! When polar ice melts or winds shift, it directly impacts the monsoon rains that water our crops and fill our rivers across India.
+2. Scientific Significance:
+Polar regions act as planetary thermal regulators. Changes in sea-ice cover, atmospheric aerosol loading, and glacier mass balance in the Arctic and Antarctic directly influence ocean currents, global weather patterns, and the monsoon systems that support agriculture across the Indian subcontinent.
 
-📚 COOL WORDS TO LEARN:
-• Cryosphere: All the frozen water parts of Earth, including glaciers, sea ice, and snow.
-• Paleoclimate: The study of ancient climates before humans started recording thermometers!
-• Teleconnection: How climate changes in one remote place (like the Arctic) can trigger rain or heat waves far away in India.
+3. Technical Terminology:
+- Cryosphere: The frozen water component of the Earth system, including sea ice, lake ice, river ice, snow cover, glaciers, ice caps, and frozen ground.
+- Paleoclimatology: The scientific study of past climates using geological and ice-core proxies prior to instrumental weather recording.
+- Teleconnections: Significant, long-distance relationships between atmospheric and oceanic pressure and temperature patterns across the globe.
 
-❓ TODAY'S BRAIN TEASER:
-Why do scientists build stations like Bharati on stilts rather than flat on the snow?
-(Hint: Think about what happens when high-speed Antarctic blizzards blow across flat surfaces!)
+4. Discussion Question for Students:
+How does the high solar reflectance (albedo) of polar snow and ice sheets help stabilize mean global surface temperatures?
 
-Earn your Polar Junior Explorer badge on the NCPOR Student Portal! 🏅"""
+Reference: NCPOR Student Education and Outreach Division."""
 
-        hashtags = "#PolarScience #NCPOR #MoES #Antarctica #Arctic #SmartEducation #ClimateAction #Cryosphere"
+        hashtags = "#PolarScience #NCPOR #MoES #Antarctica #Arctic #Cryosphere #OpenScience"
 
         return {
             "title": title,
@@ -178,148 +172,135 @@ Earn your Polar Junior Explorer badge on the NCPOR Student Portal! 🏅"""
                 "smart_education": education_content
             },
             "suggested_visuals": [
-                "Field team working with instruments at " + station_name,
-                "Satellite overlay of " + station_loc,
-                "Interactive time-series chart of measured data"
+                "Instrument deployment array at " + station_name,
+                "Satellite imagery of " + station_loc,
+                "Time-series graphical plot of recorded parameters"
             ]
         }
 
     def chat_with_scientist(self, user_message, chat_history=None):
-        """Conversational AI Persona: Dr. Himavani, Lead Polar Researcher at NCPOR / Bharati Base."""
+        """Conversational Research Assistant: NCPOR Polar Science Information Desk."""
         msg = user_message.lower().strip()
 
-        # Knowledge Base Topics & Nuanced Responses
         if any(w in msg for w in ["hello", "hi", "hey", "who are you", "introduce"]):
             reply = (
-                "Namaste! I am Dr. Himavani, a research glaciologist with the National Centre for Polar and Ocean "
-                "Research (NCPOR), Ministry of Earth Sciences. I'm currently transmitting telemetry from Bharati Station "
-                "in Larsemann Hills, Antarctica (-18.4°C right now!). Ask me anything about our polar expeditions, "
-                "living in extreme cold, ice cores, or how Arctic warming connects to the Indian Monsoon!"
+                "Welcome to the National Centre for Polar and Ocean Research (NCPOR) scientific inquiry desk. "
+                "I provide verified information regarding Indian polar missions across Antarctica (Bharati and Maitri stations), "
+                "the Arctic (Himadri station), and the Himalayas (Himansh station). You may ask questions regarding station logistics, "
+                "ice-core paleoclimatology, polar survival protocols, or Arctic-monsoon teleconnections."
             )
             suggestions = [
-                "How do scientists survive -50°C in Antarctica?",
-                "Why does India study the Arctic at Himadri?",
-                "What do ice cores tell us about climate change?",
-                "How does melting Arctic ice affect Indian monsoons?"
+                "Survival protocols in -50C at Antarctic stations",
+                "Arctic warming and Indian Monsoon teleconnections",
+                "Paleoclimate records from deep ice cores",
+                "Third Pole Himalayan glacier mass balance"
             ]
 
-        elif any(w in msg for w in ["survive", "cold", "food", "life", "-50", "daily life", "winter"]):
+        elif any(w in msg for w in ["survive", "cold", "food", "life", "-50", "daily life", "winter", "temperature"]):
             reply = (
-                "Living at India's Antarctic stations like Bharati and Maitri is an extraordinary logistical feat! "
-                "Bharati station is built on stilts from 134 prefabricated shipping containers, designed to withstand "
-                "winds of up to 200 km/h and blizzards. We have automated heating systems, hydroponic fresh vegetable units, "
-                "satellite internet via AGEOS, and fresh water melted from polar ice shelves or Lake Priyadarshini. "
-                "During polar winter, we endure months of 24-hour total darkness, so psychological endurance and "
-                "strict safety protocols are vital."
+                "Field operations at India's Antarctic stations, Bharati and Maitri, require rigorous engineering and safety standards. "
+                "Bharati station is constructed on stilts using 134 prefabricated, thermal-insulated shipping containers engineered to "
+                "withstand blizzard winds up to 200 km/h and temperatures below -45°C. Heating systems utilize combined heat and power (CHP) "
+                "units, freshwater is extracted from regulated melt-water bodies and Lake Priyadarshini, and satellite data connectivity is "
+                "sustained through dedicated Earth stations (AGEOS). During polar winters, strict psychological, dietary, and medical "
+                "protocols are maintained for wintering teams."
             )
             suggestions = [
-                "What is Lake Priyadarshini?",
-                "How do you get to Antarctica from India?",
-                "Tell me about Bharati station architecture."
+                "Lake Priyadarshini water management",
+                "Architecture of Bharati research station",
+                "Wintering logistics during polar night"
             ]
 
         elif any(w in msg for w in ["arctic", "himadri", "svalbard", "monsoon", "teleconnection"]):
             reply = (
-                "Great question! India's Arctic base, Himadri, was established in 2008 at Ny-Ålesund, Svalbard (79°N). "
-                "A core reason NCPOR conducts Arctic research is 'teleconnections': rapid Arctic warming and Barents-Kara "
-                "sea ice depletion destabilize the northern polar jet stream. This creates atmospheric planetary waves "
-                "that alter monsoon depressions, contributing to erratic rainfall and extreme weather over India. "
-                "By monitoring Arctic aerosols and fjord dynamics, we improve India's seasonal monsoon forecasting."
+                "India's Arctic research station, Himadri, was commissioned in 2008 at Ny-Alesund, Svalbard, Norway (78°55'N). "
+                "A key focus of NCPOR Arctic science is studying 'teleconnections'. Rapid retreat of Barents-Kara sea ice during winter "
+                "perturbs the circum-polar jet stream, generating persistent planetary Rossby waves that modulate the frequency of "
+                "monsoon depressions and extreme rainfall occurrences over the Indian subcontinent. Observational parameters include "
+                "atmospheric aerosols, marine fjord dynamics in Kongsfjorden, and snowpack albedo."
             )
             suggestions = [
-                "What is the Third Pole?",
-                "How do ice cores preserve ancient air bubbles?",
-                "What animals live near Himadri in the Arctic?"
+                "IndARC underwater moored observatory",
+                "First Indian Arctic winter expedition",
+                "Differences between Arctic and Antarctic research"
             ]
 
         elif any(w in msg for w in ["third pole", "himansh", "himalaya", "glacier", "spiti"]):
             reply = (
-                "The Himalayas are known globally as 'The Third Pole' because they contain the highest concentration of "
-                "snow and ice outside the Arctic and Antarctic! NCPOR established the Himansh station in 2016 at 4,080 meters "
-                "in the Chandra Basin, Spiti Valley. Our glaciologists monitor benchmark glaciers like Chhota Shigri and "
-                "Samudra Tapu. These glaciers feed major river basins (Indus, Ganga, Brahmaputra) supporting over 1.4 billion people, "
-                "making glacier melt studies crucial for India's future water security."
+                "The Hindu Kush-Himalayan region is designated as 'The Third Pole' because it stores the highest volume of permanent "
+                "snow and ice outside the polar ice sheets. In 2016, NCPOR commissioned the Himansh field station at an altitude of 4,080 meters "
+                "in the Chandra Basin, Spiti Valley, Himachal Pradesh. Glaciologists at Himansh record seasonal and cumulative specific mass "
+                "balance, ice thickness using ground-penetrating radar (GPR), and hydrological runoff for benchmark glaciers such as "
+                "Chhota Shigri and Samudra Tapu, which feed major river systems across northern India."
             )
             suggestions = [
-                "How much ice is Chhota Shigri losing?",
-                "How do scientists measure glacier mass balance?",
-                "Tell me about Indian Antarctic expeditions."
+                "Cumulative mass loss of Chhota Shigri glacier",
+                "High-altitude glaciological monitoring methods",
+                "Water security implications for river basins"
             ]
 
         elif any(w in msg for w in ["ice core", "co2", "paleoclimate", "bubbles", "carbon"]):
             reply = (
-                "Ice cores are Earth's natural time capsules! When snow falls in Antarctica, it traps tiny pockets of the "
-                "contemporary atmosphere. Over hundreds and thousands of years, pressure transforms that snow into solid ice, "
-                "sealing those ancient air bubbles permanently. At Maitri, our teams extract deep ice cores and measure stable "
-                "isotopes and greenhouse gas ratios. This lets us reconstruct pre-industrial CO2 levels (around 280 ppm) versus "
-                "modern levels exceeding 420 ppm with undeniable physical proof."
+                "Deep ice cores extracted from the Antarctic ice sheet serve as high-resolution archives of past atmospheric composition. "
+                "As snow falls and compacts into firn and solid glacier ice, ambient air is hermetically sealed within micro-bubbles. "
+                "At Maitri station, NCPOR paleoclimatologists retrieve ice cores to measure stable water isotopes (delta-18O and delta-D) "
+                "and trace greenhouse gas concentrations, providing empirical confirmation of pre-industrial atmospheric CO2 baselines "
+                "(approximately 280 ppm) versus contemporary measurements exceeding 420 ppm."
             )
             suggestions = [
-                "What are psychrophilic bacteria?",
-                "What is the Albedo effect?",
-                "How can I become a polar scientist?"
+                "Ice core extraction techniques at Maitri",
+                "Stable isotope analysis as temperature proxies",
+                "Psychrophilic microbial records in ice cores"
             ]
 
         elif any(w in msg for w in ["penguin", "animal", "wildlife", "polar bear", "krill", "organism", "fish"]):
             reply = (
-                "Polar ecosystems are fascinatingly adapted! In Antarctica near Bharati and Maitri, you will find Adélie and "
-                "Emperor penguins, Weddell and Leopard seals, skuas, and billions of Antarctic krill (the keystone of the "
-                "Southern Ocean). In the Arctic near Himadri, you find Polar Bears, Arctic foxes, Svalbard reindeer, and walruses. "
-                "Remember: Polar bears live only in the Arctic, and penguins live in the Southern Hemisphere/Antarctica—they never "
-                "meet in nature!"
+                "Polar ecosystems host specialized biological adaptations. In coastal Antarctica near Bharati station, annual ecological "
+                "monitoring tracks Adelie and Emperor penguin colonies and Weddell seal populations as biological indicators of Southern "
+                "Ocean food web stability and Antarctic krill (Euphausia superba) biomass. In contrast, the Arctic terrestrial ecosystem "
+                "near Himadri supports polar bears, Arctic foxes, and Svalbard reindeer. Polar bears inhabit exclusively Arctic regions, "
+                "whereas penguins inhabit the Southern Hemisphere."
             )
             suggestions = [
-                "What extremophiles live under Antarctic ice?",
-                "How do penguins stay warm in -40°C?",
-                "What is the difference between Arctic and Antarctic?"
+                "Southern Ocean krill population dynamics",
+                "Extremophilic bacteria in Antarctic lakes",
+                "Biodiversity protection under the Antarctic Treaty"
             ]
 
         elif any(w in msg for w in ["career", "student", "become", "join", "eligibility", "study"]):
             reply = (
-                "It's thrilling to see students interested in polar science! You can join Indian polar research through NCPOR "
-                "and MoES by pursuing degrees in Earth Sciences, Glaciology, Atmospheric Physics, Oceanography, Microbiology, "
-                "Geophysics, or Environmental Engineering. NCPOR regularly advertises research fellowships (JRF/SRF), project "
-                "scientist positions, and calls for scientific proposals for the annual Indian Scientific Expedition to Antarctica (ISEA) "
-                "and Arctic campaigns. Keep studying science and checking moes.gov.in and ncpor.res.in!"
+                "Scientific opportunities at NCPOR and the Ministry of Earth Sciences are open to candidates across Earth Sciences, "
+                "Glaciology, Atmospheric Physics, Oceanography, Geophysics, and Environmental Biotechnology. NCPOR regularly issues "
+                "official notifications for Junior and Senior Research Fellowships (JRF/SRF), Project Scientist posts, and competitive "
+                "calls for scientific proposals for the annual Indian Scientific Expedition to Antarctica (ISEA) and Arctic expeditions. "
+                "Official announcements are published on ncpor.res.in and moes.gov.in."
             )
             suggestions = [
-                "What is the Indian Scientific Expedition to Antarctica (ISEA)?",
-                "Tell me about the National Polar Quiz.",
-                "How do ice cores work?"
+                "Annual ISEA expedition proposal procedure",
+                "Physical and medical fitness requirements",
+                "Research fellowships under MoES"
             ]
 
         else:
             reply = (
-                f"That is an intriguing question regarding '{user_message}'! In polar science, every anomaly—whether in "
-                "stratospheric ozone levels, ice sheet radar sounding, or Southern Ocean carbon sinks—holds clues to planetary "
-                "stability. At NCPOR, our mandate under the Ministry of Earth Sciences is to combine field expeditions across "
-                "Antarctica, the Arctic, and the Himalayas with predictive Earth system models. Would you like to explore our "
-                "archived datasets or know more about our current wintering expeditions?"
+                f"Regarding '{user_message}': Investigations conducted under the Ministry of Earth Sciences PACER scheme prioritize "
+                "multidisciplinary Earth system observations across the cryosphere, oceans, and atmosphere. Verified technical reports, "
+                "station weather telemetry, and peer-reviewed publications are indexed within the NCPOR Knowledge Repository. "
+                "Please specify if you require details on observatory facilities, research datasets, or expedition history."
             )
             suggestions = [
-                "Tell me about Bharati and Maitri stations.",
-                "How does the Arctic influence the Indian Monsoon?",
-                "What is the Third Pole Himalayas?",
-                "How do ice cores store climate history?"
+                "Station infrastructure and facilities",
+                "Arctic-Monsoon teleconnection data",
+                "Third Pole Himalayan glaciology",
+                "Ice core paleoclimate chronology"
             ]
 
         return {
             "reply": reply,
-            "speaker": "Dr. Himavani (NCPOR Scientist)",
+            "speaker": "NCPOR Research Information Desk",
             "station": "Bharati Antarctic Observatory",
             "suggested_questions": suggestions
         }
 
 # Global singleton
 content_engine = PolarContentEngine()
-
-if __name__ == '__main__':
-    import sys
-    try:
-        sys.stdout.reconfigure(encoding='utf-8')
-    except Exception:
-        pass
-    demo_sample = "Continuous ice core drilling at Maitri station has revealed accelerated shifts in atmospheric greenhouse gases over the last 150 years, linking Southern Ocean temperature fluctuations with regional wind patterns."
-    res = content_engine.generate_all("Centennial Ice Core Geochemical Survey", demo_sample, "maitri")
-    print("Engine Test Success! Generated", len(res["outputs"]), "formats.")
-    print("Sample Twitter Thread Preview:\n", res["outputs"]["twitter"][:120].encode('ascii', 'ignore').decode('ascii'), "...")

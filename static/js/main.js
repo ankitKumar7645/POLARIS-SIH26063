@@ -892,14 +892,14 @@ async function sendChatMessage(text) {
     typingDiv.id = typingId;
     typingDiv.className = 'flex items-start gap-2';
     typingDiv.innerHTML = `
-        <div class="w-6 h-6 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 text-[10px] shrink-0 mt-0.5">
-            <i class="fa-solid fa-user-astronaut"></i>
+        <div class="w-6 h-6 rounded-lg bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-300 text-[10px] shrink-0 mt-0.5">
+            <i class="fa-solid fa-building-columns"></i>
         </div>
-        <div class="bg-[#051120] border border-slate-800 rounded-2xl rounded-tl-none p-3 text-slate-400 text-xs italic flex items-center gap-1.5 shadow">
-            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce"></span>
-            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.2s]"></span>
-            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.4s]"></span>
-            <span class="ml-1 text-[11px]">Transmitting from Bharati Station...</span>
+        <div class="bg-[#0f172a] border border-slate-700 rounded-xl p-3 text-slate-400 text-xs italic flex items-center gap-1.5 shadow">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-bounce"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-bounce [animation-delay:0.2s]"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-bounce [animation-delay:0.4s]"></span>
+            <span class="ml-1 text-[11px]">Consulting NCPOR Polar Research Database...</span>
         </div>
     `;
     container.appendChild(typingDiv);
@@ -942,7 +942,7 @@ async function sendChatMessage(text) {
     } catch (err) {
         const typingEl = document.getElementById(typingId);
         if (typingEl) typingEl.remove();
-        appendChatBubble("Dr. Himavani", "Telemetry connection momentarily lost over the Southern Ocean. Please retry in a moment!", false);
+        appendChatBubble("NCPOR Information Desk", "The inquiry service is temporarily reconnecting to the polar observation database. Please retry momentarily.", false);
     } finally {
         sendBtn.disabled = false;
         container.scrollTop = container.scrollHeight;
@@ -956,19 +956,19 @@ function appendChatBubble(sender, text, isUser) {
 
     if (isUser) {
         div.innerHTML = `
-            <div class="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl rounded-tr-none p-3 text-white max-w-[85%] shadow-md">
+            <div class="bg-blue-600 rounded-xl rounded-tr-none p-3 text-white max-w-[85%] shadow-sm text-xs">
                 ${text}
             </div>
-            <div class="w-6 h-6 rounded-lg bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-300 text-[10px] shrink-0 mt-0.5">
+            <div class="w-6 h-6 rounded-lg bg-slate-700 border border-slate-600 flex items-center justify-center text-slate-300 text-[10px] shrink-0 mt-0.5">
                 <i class="fa-solid fa-user"></i>
             </div>
         `;
     } else {
         div.innerHTML = `
-            <div class="w-6 h-6 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 text-[10px] shrink-0 mt-0.5">
-                <i class="fa-solid fa-user-astronaut"></i>
+            <div class="w-6 h-6 rounded-lg bg-blue-900/50 border border-blue-500/40 flex items-center justify-center text-blue-300 text-[10px] shrink-0 mt-0.5">
+                <i class="fa-solid fa-building-columns"></i>
             </div>
-            <div class="bg-[#051120] border border-slate-800 rounded-2xl rounded-tl-none p-3 text-slate-200 max-w-[85%] shadow leading-relaxed">
+            <div class="bg-[#0f172a] border border-slate-700/80 rounded-xl rounded-tl-none p-3 text-slate-200 max-w-[85%] shadow-sm leading-relaxed text-xs">
                 ${text}
             </div>
         `;
@@ -984,7 +984,7 @@ function renderChatSuggestions(suggestions) {
     let html = '';
     suggestions.slice(0, 4).forEach(q => {
         html += `
-            <button onclick="sendQuickQuestion(\`${q.replace(/`/g, '\\`')}\`)" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-cyan-300 shrink-0 transition-colors">
+            <button onclick="sendQuickQuestion(\`${q.replace(/`/g, '\\`')}\`)" class="whitespace-nowrap px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white shrink-0 transition-colors text-[11px]">
                 ${q}
             </button>
         `;

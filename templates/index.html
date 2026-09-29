@@ -56,68 +56,70 @@
 </head>
 <body class="bg-[#030d1a] text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-polar-500 selection:text-white">
 
-    <!-- TOP GOVT / MOES EMBLEM BAR -->
-    <header class="border-b border-glacier-border bg-[#020812]/90 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- MoES Header Banner -->
-            <div class="flex items-center justify-between py-2 border-b border-glacier-border/40 text-xs text-slate-400">
-                <div class="flex items-center gap-3">
-                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 font-medium">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        Govt. of India | MoES
-                    </span>
-                    <span class="hidden sm:inline">National Centre for Polar and Ocean Research (NCPOR)</span>
+    <!-- TOP OFFICIAL GOVERNMENT STRIP -->
+    <header class="border-b border-slate-800 bg-[#06111f] sticky top-0 z-50">
+        <!-- Top Institutional Bar -->
+        <div class="border-b border-slate-800/80 bg-[#030914] text-[11px] text-slate-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <span class="font-semibold text-slate-200">भारत सरकार | Government of India</span>
+                    <span class="text-slate-600">|</span>
+                    <span class="text-slate-300">पृथ्वी विज्ञान मंत्रालय | Ministry of Earth Sciences</span>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2 text-slate-300">
-                        <i class="fa-solid fa-satellite-dish text-polar-400 animate-pulse"></i>
-                        <span id="telemetry-summary">Connecting to Polar Stations...</span>
-                    </div>
+                <div class="flex items-center gap-4 text-[11px]">
+                    <span class="hidden md:inline text-slate-400">National Centre for Polar and Ocean Research (NCPOR)</span>
+                    <span class="text-slate-600 hidden md:inline">|</span>
+                    <span class="inline-flex items-center gap-1.5 text-emerald-400 font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        PACER Scheme: 4 Observatories Active
+                    </span>
                 </div>
             </div>
+        </div>
 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Primary Navigation & Branding -->
-            <div class="flex items-center justify-between py-3.5">
+            <div class="flex items-center justify-between py-3">
                 <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-700 flex items-center justify-center shadow-lg shadow-cyan-500/20 border border-cyan-400/40">
-                        <i class="fa-solid fa-compass-drafting text-white text-xl"></i>
+                    <div class="w-10 h-10 rounded-lg bg-blue-700 border border-blue-500/40 flex items-center justify-center text-white text-lg shadow-sm">
+                        <i class="fa-solid fa-earth-americas"></i>
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <h1 class="text-xl sm:text-2xl font-tech font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-polar-400">
+                            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white">
                                 POLARIS
                             </h1>
-                            <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 font-semibold uppercase tracking-wider">
-                                MoES Portal
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-blue-950 border border-blue-700/60 text-blue-300 font-medium tracking-wide">
+                                MoES • NCPOR
                             </span>
                         </div>
-                        <p class="text-xs text-slate-400 hidden sm:block">
-                            Integrated Polar Science Outreach, Knowledge Repository & Media Dissemination
+                        <p class="text-[11px] text-slate-400 hidden sm:block">
+                            National Polar Science Outreach & Knowledge Repository System
                         </p>
                     </div>
                 </div>
 
                 <!-- Navigation Tabs -->
-                <nav class="flex items-center gap-1 sm:gap-2">
-                    <button onclick="switchTab('explorer')" id="tab-btn-explorer" class="nav-tab active-tab px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                        <i class="fa-solid fa-earth-americas text-cyan-400"></i>
-                        <span class="hidden md:inline">Polar Outposts</span>
+                <nav class="flex items-center gap-1 sm:gap-1.5 text-xs">
+                    <button onclick="switchTab('explorer')" id="tab-btn-explorer" class="nav-tab active-tab px-3 py-2 rounded-md font-medium transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-satellite-dish text-blue-400"></i>
+                        <span>Observatories & GIS</span>
                     </button>
-                    <button onclick="switchTab('repository')" id="tab-btn-repository" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                        <i class="fa-solid fa-book-atlas text-blue-400"></i>
-                        <span class="hidden md:inline">Knowledge Archive</span>
+                    <button onclick="switchTab('repository')" id="tab-btn-repository" class="nav-tab px-3 py-2 rounded-md font-medium transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-database text-slate-400"></i>
+                        <span>Knowledge Repository</span>
                     </button>
-                    <button onclick="switchTab('ai-engine')" id="tab-btn-ai-engine" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 bg-gradient-to-r from-purple-900/30 to-indigo-900/30 border border-purple-500/40 text-purple-200 hover:text-white">
-                        <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i>
-                        <span>AI Media Disseminator</span>
+                    <button onclick="switchTab('ai-engine')" id="tab-btn-ai-engine" class="nav-tab px-3 py-2 rounded-md font-medium transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-bullhorn text-indigo-400"></i>
+                        <span>Outreach & Media Desk</span>
                     </button>
-                    <button onclick="switchTab('education')" id="tab-btn-education" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
+                    <button onclick="switchTab('education')" id="tab-btn-education" class="nav-tab px-3 py-2 rounded-md font-medium transition-all flex items-center gap-2">
                         <i class="fa-solid fa-graduation-cap text-emerald-400"></i>
-                        <span class="hidden md:inline">Smart Education</span>
+                        <span>Educational Portal</span>
                     </button>
-                    <button onclick="switchTab('admin')" id="tab-btn-admin" class="nav-tab px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                        <i class="fa-solid fa-shield-halved text-amber-400"></i>
-                        <span class="hidden md:inline">Scientist Console</span>
+                    <button onclick="switchTab('admin')" id="tab-btn-admin" class="nav-tab px-3 py-2 rounded-md font-medium transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-slate-400"></i>
+                        <span class="hidden md:inline">Administration</span>
                     </button>
                 </nav>
             </div>
@@ -346,16 +348,16 @@
         <!-- =================== TAB 3: AI MEDIA & SOCIAL DISSEMINATION ENGINE =================== -->
         <section id="tab-ai-engine" class="space-y-6 hidden">
             <!-- Header Banner -->
-            <div class="bg-gradient-to-r from-purple-950/60 via-[#101035] to-indigo-950/60 rounded-2xl border border-purple-500/40 p-6 md:p-8 shadow-2xl relative overflow-hidden">
+            <div class="bg-gradient-to-r from-slate-900 via-[#0a192f] to-slate-900 rounded-xl border border-slate-700/80 p-6 md:p-7 shadow-lg relative overflow-hidden">
                 <div class="relative z-10 max-w-3xl">
-                    <span class="px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400/40 text-purple-300 text-xs font-semibold uppercase tracking-wider">
-                        <i class="fa-solid fa-robot mr-1"></i> Automated Multi-Channel Dissemination
+                    <span class="px-2.5 py-1 rounded bg-indigo-950/80 border border-indigo-500/40 text-indigo-300 text-[11px] font-semibold uppercase tracking-wider">
+                        <i class="fa-solid fa-bullhorn mr-1.5"></i> Institutional Communication & Media Desk
                     </span>
-                    <h2 class="text-2xl md:text-3xl font-tech font-bold text-white mt-3">
-                        AI Polar Content & Media Dissemination Engine
+                    <h2 class="text-xl md:text-2xl font-bold text-white mt-2.5">
+                        Outreach & Media Publishing Desk
                     </h2>
-                    <p class="text-sm text-slate-300 mt-2 leading-relaxed">
-                        Solve the scientific outreach bottleneck! Ingest expedition reports, scientific papers, or field findings, and instantly generate high-impact, platform-tailored communication packets: <b>Twitter/X Threads, LinkedIn Posts, Instagram Captions, Official MoES Press Releases, and Smart Education Bites for Students.</b>
+                    <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+                        Automated translation of scientific expedition dispatches and peer-reviewed papers into structured, platform-tailored communication packets: <b>Press Information Bureau (PIB) releases, LinkedIn institutional updates, X/Twitter dispatches, and educational science briefs.</b>
                     </p>
                 </div>
             </div>
@@ -363,16 +365,16 @@
             <!-- Two-Column Generator Workspace -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- Left: Content Input & Control Panel -->
-                <div class="lg:col-span-5 bg-glacier-card rounded-2xl border border-glacier-border p-5 shadow-xl space-y-4">
-                    <h3 class="text-base font-tech font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-pen-nib text-cyan-400"></i> Input Polar Research Dispatch
+                <div class="lg:col-span-5 bg-glacier-card rounded-xl border border-glacier-border p-5 shadow-sm space-y-4">
+                    <h3 class="text-sm font-semibold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-file-lines text-blue-400"></i> Research Dispatch Input
                     </h3>
 
                     <!-- Quick Preset Picker -->
                     <div>
-                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Load Sample Polar Findings:</label>
-                        <select id="ai-preset-picker" onchange="loadPresetText()" class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-400">
-                            <option value="">-- Choose a realistic NCPOR discovery --</option>
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Load Field Finding Preset:</label>
+                        <select id="ai-preset-picker" onchange="loadPresetText()" class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                            <option value="">-- Select an authentic NCPOR expedition finding --</option>
                             <option value="arctic_monsoon">Arctic Sea Ice Depletion & Indian Monsoon Teleconnection</option>
                             <option value="ice_core_co2">150-Year Ice Core CO2 Chronology from Maitri Base</option>
                             <option value="himalayan_glacier">Western Himalayan Cryosphere Mass Loss at Himansh</option>
@@ -381,20 +383,20 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Research Title / Headline:</label>
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Research Title / Subject:</label>
                         <input type="text" id="ai-input-title" placeholder="e.g., Century-Scale Ice Core Geochemistry at Maitri"
-                               class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-400">
+                               class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
                     </div>
 
                     <div>
-                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Scientific Abstract / Field Report Dispatch:</label>
-                        <textarea id="ai-input-text" rows="6" placeholder="Paste scientific abstract, cruise summary, or research findings here..."
-                                  class="w-full bg-[#051120] border border-slate-700 rounded-lg p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-400"></textarea>
+                        <label class="block text-xs font-medium text-slate-400 mb-1.5">Scientific Abstract / Technical Summary:</label>
+                        <textarea id="ai-input-text" rows="6" placeholder="Paste research abstract, expedition summary, or field dispatch here..."
+                                  class="w-full bg-[#051120] border border-slate-700 rounded-lg p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"></textarea>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Target Observatory:</label>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Observation Station:</label>
                             <select id="ai-input-station" class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
                                 <option value="bharati">Bharati (Antarctica)</option>
                                 <option value="maitri">Maitri (Antarctica)</option>
@@ -406,15 +408,15 @@
                             <label class="block text-xs font-medium text-slate-400 mb-1">Target Audience:</label>
                             <select id="ai-input-audience" class="w-full bg-[#051120] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
                                 <option value="all">Multidisciplinary & Public</option>
-                                <option value="students">K-12 & University Students</option>
-                                <option value="media">Journalists & Press</option>
-                                <option value="scientists">Global Research Community</option>
+                                <option value="students">Academic & Student Community</option>
+                                <option value="media">Accredited News Media & Journalists</option>
+                                <option value="scientists">Research Institutes & Modelers</option>
                             </select>
                         </div>
                     </div>
 
-                    <button onclick="triggerAIGeneration()" id="ai-generate-btn" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white text-sm font-tech font-bold tracking-wide shadow-lg shadow-purple-600/30 transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-sparkles"></i> Synthesize Multi-Platform Outreach Content
+                    <button onclick="triggerAIGeneration()" id="ai-generate-btn" class="w-full py-2.5 px-4 rounded-lg bg-blue-700 hover:bg-blue-600 text-white text-xs font-semibold tracking-wide shadow transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-export"></i> Synthesize Multi-Channel Dispatches
                     </button>
                 </div>
 
@@ -604,19 +606,19 @@
                         </div>
                     </div>
 
-                    <!-- Ask a Polar Scientist Callout Card in Education Tab -->
-                    <div class="bg-gradient-to-r from-cyan-950/70 to-blue-950/70 rounded-2xl border border-cyan-500/40 p-4 shadow-xl flex items-center justify-between">
+                    <!-- NCPOR Scientific Inquiry Desk Callout Card in Education Tab -->
+                    <div class="bg-gradient-to-r from-[#091a33] to-[#071322] rounded-xl border border-blue-500/30 p-4 shadow flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-xl bg-cyan-500/20 border border-cyan-400/60 flex items-center justify-center text-cyan-300 text-lg shadow-md shadow-cyan-500/20">
-                                <i class="fa-solid fa-user-astronaut"></i>
+                            <div class="w-10 h-10 rounded-lg bg-blue-700/30 border border-blue-500/50 flex items-center justify-center text-blue-300 text-base">
+                                <i class="fa-solid fa-building-columns"></i>
                             </div>
                             <div>
-                                <h4 class="text-xs sm:text-sm font-tech font-bold text-white">Ask Dr. Himavani (Polar Scientist)</h4>
-                                <p class="text-[11px] text-slate-300">Live AI Q&A transmitting from Bharati Station, Antarctica</p>
+                                <h4 class="text-xs sm:text-sm font-semibold text-white">NCPOR Scientific Inquiry Desk</h4>
+                                <p class="text-[11px] text-slate-300">Automated query service for polar stations, expeditions & paleoclimate data</p>
                             </div>
                         </div>
-                        <button onclick="openChatDrawer()" class="px-3 py-1.5 rounded-lg bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md shadow-cyan-400/20">
-                            <i class="fa-solid fa-comments"></i> Start Q&A
+                        <button onclick="openChatDrawer()" class="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs flex items-center gap-1.5 shadow">
+                            <i class="fa-solid fa-comments"></i> Inquire Now
                         </button>
                     </div>
                 </div>
@@ -869,44 +871,33 @@
         </div>
     </div>
 
-    <!-- =================== FLOATING ASK A POLAR SCIENTIST CHAT WIDGET =================== -->
+    <!-- =================== FLOATING NCPOR RESEARCH INQUIRY DESK =================== -->
     <!-- Launcher Button -->
-    <div id="chat-launcher-btn" onclick="toggleChatDrawer()" class="fixed bottom-5 right-5 z-40 flex items-center gap-3 bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-700 hover:from-cyan-500 hover:to-blue-500 text-white px-4 py-3 rounded-full shadow-2xl shadow-cyan-500/30 border border-cyan-400/50 cursor-pointer transition-all hover:scale-105 group">
-        <div class="relative w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-base">
-            <i class="fa-solid fa-user-astronaut"></i>
-            <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full border-2 border-[#020812] animate-pulse"></span>
+    <div id="chat-launcher-btn" onclick="toggleChatDrawer()" class="fixed bottom-5 right-5 z-40 flex items-center gap-2.5 bg-blue-700 hover:bg-blue-600 text-white px-4 py-2.5 rounded-full shadow-lg border border-blue-400/40 cursor-pointer transition-all hover:scale-105 group text-xs font-medium">
+        <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white text-xs">
+            <i class="fa-solid fa-building-columns"></i>
         </div>
-        <div class="hidden sm:block text-left">
-            <span class="block text-xs font-tech font-bold tracking-wider leading-tight">ASK DR. HIMAVANI</span>
-            <span class="block text-[10px] text-cyan-200">Live from Antarctica • NCPOR AI</span>
-        </div>
-        <i class="fa-solid fa-chevron-up text-xs text-cyan-200 group-hover:-translate-y-0.5 transition-transform"></i>
+        <span>NCPOR Research Inquiry Desk</span>
     </div>
 
     <!-- Interactive Chat Drawer -->
-    <div id="chat-drawer" class="fixed bottom-20 right-5 z-50 w-96 max-w-[calc(100vw-2.5rem)] h-[540px] max-h-[82vh] rounded-2xl bg-glacier-card border border-cyan-500/50 shadow-2xl shadow-black/80 flex flex-col overflow-hidden hidden transition-all">
+    <div id="chat-drawer" class="fixed bottom-20 right-5 z-50 w-96 max-w-[calc(100vw-2.5rem)] h-[540px] max-h-[82vh] rounded-xl bg-[#091526] border border-slate-700 shadow-2xl shadow-black/80 flex flex-col overflow-hidden hidden transition-all">
         <!-- Chat Header -->
-        <div class="p-3.5 bg-gradient-to-r from-[#071930] via-[#0b2447] to-[#071930] border-b border-glacier-border flex items-center justify-between">
+        <div class="p-3.5 bg-[#071322] border-b border-slate-800 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
-                <div class="relative w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-300 text-lg">
-                    <i class="fa-solid fa-user-astronaut"></i>
-                    <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-black"></span>
+                <div class="w-8 h-8 rounded-lg bg-blue-600/30 border border-blue-500/50 flex items-center justify-center text-blue-300 text-sm">
+                    <i class="fa-solid fa-building-columns"></i>
                 </div>
                 <div>
-                    <div class="flex items-center gap-1.5">
-                        <h4 class="text-xs font-tech font-bold text-white tracking-wide">Dr. Himavani (NCPOR)</h4>
-                        <span class="px-1.5 py-0.2 rounded bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[9px] font-mono">Scientist</span>
-                    </div>
-                    <p class="text-[10px] text-slate-400 flex items-center gap-1">
-                        <i class="fa-solid fa-satellite text-cyan-400"></i> Bharati Station, Antarctica (-18.4°C)
-                    </p>
+                    <h4 class="text-xs font-semibold text-white">NCPOR Research Inquiry Desk</h4>
+                    <p class="text-[10px] text-slate-400">Scientific Information Service • Ministry of Earth Sciences</p>
                 </div>
             </div>
             <div class="flex items-center gap-1">
-                <button onclick="toggleVoiceSpeech()" id="voice-toggle-btn" title="Toggle Voice Read-Aloud" class="w-7 h-7 rounded-lg bg-black/40 hover:bg-black/60 text-slate-400 hover:text-cyan-400 text-xs flex items-center justify-center transition-colors">
+                <button onclick="toggleVoiceSpeech()" id="voice-toggle-btn" title="Toggle Voice Read-Aloud" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs flex items-center justify-center transition-colors">
                     <i class="fa-solid fa-volume-high" id="voice-icon"></i>
                 </button>
-                <button onclick="toggleChatDrawer()" title="Close Chat" class="w-7 h-7 rounded-lg bg-black/40 hover:bg-black/60 text-slate-400 hover:text-white text-xs flex items-center justify-center transition-colors">
+                <button onclick="toggleChatDrawer()" title="Close Desk" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs flex items-center justify-center transition-colors">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -916,36 +907,36 @@
         <div id="chat-messages-container" class="flex-1 p-3.5 overflow-y-auto space-y-3 text-xs leading-relaxed">
             <!-- Welcome message -->
             <div class="flex items-start gap-2">
-                <div class="w-6 h-6 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 text-[10px] shrink-0 mt-0.5">
-                    <i class="fa-solid fa-snowflake"></i>
+                <div class="w-6 h-6 rounded bg-blue-900/40 border border-blue-700/50 flex items-center justify-center text-blue-300 text-[10px] shrink-0 mt-0.5">
+                    <i class="fa-solid fa-building-columns"></i>
                 </div>
-                <div class="bg-[#051120] border border-slate-800 rounded-2xl rounded-tl-none p-3 text-slate-200 max-w-[85%] shadow">
-                    Namaste! I am <b>Dr. Himavani</b>, transmitting live telemetry from India's <b>Bharati Station</b> in Antarctica. Ask me anything about our polar expeditions, survival in -50°C, ice cores, or the Arctic-Indian Monsoon connection!
+                <div class="bg-[#0f172a] border border-slate-700/80 rounded-xl rounded-tl-none p-3 text-slate-200 max-w-[88%] shadow-sm leading-relaxed text-xs">
+                    Welcome to the <b>National Centre for Polar and Ocean Research (NCPOR)</b> scientific inquiry desk. You may query verified records regarding Indian polar research stations (Bharati, Maitri, Himadri, Himansh), ice core paleoclimatology, Arctic-monsoon teleconnections, and scientific research opportunities.
                 </div>
             </div>
         </div>
 
         <!-- Quick Question Chips -->
-        <div class="px-3 py-2 border-t border-glacier-border/40 bg-[#040e1c] flex items-center gap-1.5 overflow-x-auto scrollbar-none text-[11px]" id="chat-suggestions-bar">
-            <button onclick="sendQuickQuestion('How do scientists survive -50°C in Antarctica?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-cyan-300 shrink-0 transition-colors">
-                ❄️ Survive -50°C
+        <div class="px-3 py-2 border-t border-slate-800 bg-[#06101c] flex items-center gap-1.5 overflow-x-auto scrollbar-none text-[11px]" id="chat-suggestions-bar">
+            <button onclick="sendQuickQuestion('What are the survival and engineering protocols at -50°C in Antarctica?')" class="whitespace-nowrap px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white shrink-0 transition-colors text-[11px]">
+                Survival Protocols in -50°C
             </button>
-            <button onclick="sendQuickQuestion('Why does India study the Arctic at Himadri?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-cyan-300 shrink-0 transition-colors">
-                🌧️ Arctic & Monsoon
+            <button onclick="sendQuickQuestion('How does Arctic sea ice retreat influence the Indian Summer Monsoon?')" class="whitespace-nowrap px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white shrink-0 transition-colors text-[11px]">
+                Arctic & Indian Monsoon
             </button>
-            <button onclick="sendQuickQuestion('What do ice cores tell us about climate change?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-cyan-300 shrink-0 transition-colors">
-                🧊 Ice Core CO2
+            <button onclick="sendQuickQuestion('What do ice core records at Maitri tell us about greenhouse gases?')" class="whitespace-nowrap px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white shrink-0 transition-colors text-[11px]">
+                Ice Core Paleoclimatology
             </button>
-            <button onclick="sendQuickQuestion('How can I become a polar scientist?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/30 text-cyan-300 shrink-0 transition-colors">
-                🎓 Career in Polar Science
+            <button onclick="sendQuickQuestion('How can researchers join the Indian Scientific Expedition to Antarctica?')" class="whitespace-nowrap px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white shrink-0 transition-colors text-[11px]">
+                Research Fellowships at NCPOR
             </button>
         </div>
 
         <!-- Message Input Box -->
-        <form onsubmit="handleSendChatMessage(event)" class="p-2.5 border-t border-glacier-border bg-[#07172c] flex items-center gap-2">
-            <input type="text" id="chat-input-field" placeholder="Ask Dr. Himavani a question..." autocomplete="off"
-                   class="flex-1 bg-[#051120] border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400">
-            <button type="submit" id="chat-send-btn" class="w-9 h-9 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 flex items-center justify-center transition-colors shadow">
+        <form onsubmit="handleSendChatMessage(event)" class="p-2.5 border-t border-slate-800 bg-[#071322] flex items-center gap-2">
+            <input type="text" id="chat-input-field" placeholder="Enter scientific inquiry..." autocomplete="off"
+                   class="flex-1 bg-[#0f172a] border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+            <button type="submit" id="chat-send-btn" class="w-8 h-8 rounded-lg bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition-colors shadow">
                 <i class="fa-solid fa-paper-plane text-xs"></i>
             </button>
         </form>

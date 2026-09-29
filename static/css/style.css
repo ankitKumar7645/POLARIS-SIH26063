@@ -1,4 +1,4 @@
-/* Custom Styles for POLARIS Portal */
+/* Institutional Styles for POLARIS Portal (NCPOR / MoES) */
 
 /* Custom scrollbars */
 ::-webkit-scrollbar {
@@ -6,101 +6,103 @@
     height: 6px;
 }
 ::-webkit-scrollbar-track {
-    background: #030d1a;
+    background: #020814;
 }
 ::-webkit-scrollbar-thumb {
-    background: #163860;
-    border-radius: 4px;
+    background: #1e3a5f;
+    border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #0284c7;
+    background: #2563eb;
 }
 
-/* Glassmorphism Cards */
+/* Institutional Card Surfaces */
 .bg-glacier-card {
-    background: linear-gradient(135deg, rgba(10, 29, 55, 0.85) 0%, rgba(6, 19, 37, 0.95) 100%);
-    backdrop-filter: blur(12px);
+    background: #0b192e;
 }
 
 .border-glacier-border {
-    border-color: rgba(22, 56, 96, 0.6);
+    border-color: #1e3a5f;
 }
 
-/* Nav Tabs */
+/* Institutional Navigation Tabs */
 .nav-tab {
     color: #94a3b8;
     background: transparent;
+    border: 1px solid transparent;
 }
 .nav-tab:hover {
-    color: #e2e8f0;
-    background: rgba(14, 165, 233, 0.1);
+    color: #f1f5f9;
+    background: #132742;
+    border-color: #1e3a5f;
 }
 .active-tab {
-    color: #38bdf8 !important;
-    background: rgba(14, 165, 233, 0.15) !important;
-    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    color: #ffffff !important;
+    background: #1d4ed8 !important;
+    border: 1px solid #3b82f6 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* AI Platform selector tabs */
+/* Media Platform selector tabs */
 .ai-platform-tab {
     color: #94a3b8;
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(51, 65, 85, 0.6);
-    transition: all 0.2s ease;
+    background: #0f1f38;
+    border: 1px solid #1e3a5f;
+    transition: all 0.15s ease;
 }
 .ai-platform-tab:hover {
     color: #f8fafc;
-    background: rgba(51, 65, 85, 0.5);
+    background: #162d4e;
 }
 .active-platform {
-    color: #38bdf8 !important;
-    background: rgba(14, 165, 233, 0.2) !important;
-    border-color: rgba(56, 189, 248, 0.5) !important;
+    color: #ffffff !important;
+    background: #1d4ed8 !important;
+    border-color: #3b82f6 !important;
     font-weight: 600;
 }
 
-/* Leaflet Customizations for Dark Polar Theme */
+/* Leaflet GIS Customizations */
 .leaflet-container {
-    background: #040d1a !important;
-    font-family: 'Inter', sans-serif !important;
+    background: #050e1a !important;
+    font-family: 'Inter', system-ui, sans-serif !important;
 }
 .leaflet-popup-content-wrapper {
-    background: #0a1d37 !important;
-    color: #f1f5f9 !important;
-    border: 1px solid #0ea5e9 !important;
-    border-radius: 12px !important;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7) !important;
+    background: #09172c !important;
+    color: #f8fafc !important;
+    border: 1px solid #2563eb !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
 }
 .leaflet-popup-tip {
-    background: #0a1d37 !important;
+    background: #09172c !important;
 }
 
-/* Pulse animation for station markers */
+/* Station Markers - Institutional GIS style */
 .station-pin {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     color: white;
-    font-size: 14px;
-    border: 2px solid white;
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.8);
+    font-size: 13px;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: transform 0.15s ease;
 }
 .station-pin:hover {
-    transform: scale(1.2);
+    transform: scale(1.15);
 }
 .pin-antarctica {
-    background: linear-gradient(135deg, #0284c7, #0369a1);
+    background: #0284c7;
 }
 .pin-arctic {
-    background: linear-gradient(135deg, #10b981, #047857);
+    background: #059669;
 }
 .pin-himalaya {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: #d97706;
 }
 
 /* Certificate Print Styles */
