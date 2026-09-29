@@ -23,6 +23,21 @@ if sys.platform.startswith('win'):
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sih2026-ncpor-polar-secret-key'
 
+# Auto-initialize and seed database if empty (crucial for cloud deployment)
+try:
+    from sample_data import seed_database
+    init_db()
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM stations")
+    if cursor.fetchone()[0] == 0:
+        conn.close()
+        seed_database()
+    else:
+        conn.close()
+except Exception as e:
+    print("Database init notice:", e)
+
 # ----------------- PAGE ROUTES ----------------- #
 @app.route('/')
 def index():
@@ -425,7 +440,6 @@ def chat_scientist():
     return jsonify(response)
 
 if __name__ == '__main__':
-    init_db()
     port = int(os.environ.get('PORT', 5000))
-    print(f"Polar Science Portal starting on http://127.0.0.1:{port}")
-    app.run(host='127.0.0.1', port=port, debug=True)
+    print(f"Polar Science Portal starting on http://0.0.0.0:{port}")
+    app.run(host='0.0.0.0', port=port, debug=True)
